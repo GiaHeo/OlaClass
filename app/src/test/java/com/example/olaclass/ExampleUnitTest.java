@@ -1,4 +1,4 @@
-package com.example.sinhvien;
+package com.example.olaclass;
 
 import org.junit.Test;
 

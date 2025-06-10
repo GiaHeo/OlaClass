@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1047655918978",
+    "project_id": "olaclass-567ca",
+    "storage_bucket": "olaclass-567ca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047655918978:android:cdd3f587a3c4df2ed5739b",
+        "android_client_info": {
+          "package_name": "com.example.olaclass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKYNmeF3_XfUeCYa3FLERD0r1BPXf0WIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+} 
