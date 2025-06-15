@@ -85,13 +85,13 @@ Mô tả: Cho phép người dùng chỉnh sửa thông tin cá nhân
 - [x] Task 2.1: Tạo form cập nhật thông tin cá nhân
 - [x] Task 2.2: Validation dữ liệu đầu vào
 - [x] Task 2.3: Cập nhật dữ liệu trong Firestore
-- [ ] Task 2.4: Upload và quản lý ảnh đại diện
+- [x] Task 2.4: Upload và quản lý ảnh đại diện
 
 #### UC3: Nhận Thông báo
 Mô tả: Hệ thống thông báo đa kênh
-- [ ] Task 3.1: Tích hợp Firebase Cloud Messaging
-- [ ] Task 3.2: Thiết kế template thông báo
-- [ ] Task 3.3: Xây dựng logic gửi thông báo tự động
+- [x] Task 3.1: Tích hợp Firebase Cloud Messaging
+- [x] Task 3.2: Thiết kế template thông báo
+- [x] Task 3.3: Xây dựng logic gửi thông báo tự động
 - [ ] Task 3.4: Tích hợp thông báo email (tùy chọn)
 
 #### UC4: Cài đặt Thông báo
