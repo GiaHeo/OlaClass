@@ -7,6 +7,10 @@ android {
     namespace 'com.example.olaclass'
     compileSdk 35
 
+    viewBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.olaclass"
         minSdk 28
