@@ -167,20 +167,21 @@ Mô tả: Xây dựng giao diện và logic tạo bài kiểm tra/bài tập tr�
 
 #### UC10: Thiết lập Hạn nộp
 Mô tả: Quản lý thời gian nộp bài linh hoạt
-- [ ] Task 10.1: Date/time picker cho hạn nộp
-- [ ] Task 10.2: Cảnh báo trước hạn nộp
-- [ ] Task 10.3: Xử lý bài nộp trễ
-- [ ] Task 10.4: Gia hạn nộp bài cho học sinh cụ thể
+- [x] Task 10.1: Date/time picker cho hạn nộp
+- [x] Task 10.2: Cảnh báo trước hạn nộp
+- [x] Task 10.3: Xử lý bài nộp trễ
+- [x] Task 10.4: Gia hạn nộp bài cho học sinh cụ thể
 
 #### UC11: Lên lịch Phát hành
 Mô tả: Tự động hóa việc phát hành bài tập
-- [ ] Task 11.1: Scheduler để phát hành bài tập theo thời gian
-- [ ] Task 11.2: Preview bài tập được lên lịch
-- [ ] Task 11.3: Chỉnh sửa/hủy lịch phát hành
-- [ ] Task 11.4: Thông báo tự động khi phát hành
+- [x] Task 11.1: Scheduler để phát hành bài tập theo thời gian
+- [x] Task 11.2: Preview bài tập được lên lịch
+- [x] Task 11.3: Chỉnh sửa/hủy lịch phát hành
+- [x] Task 11.4: Thông báo tự động khi phát hành
 
 #### UC12: Sao chép Bài tập
 Mô tả: Tái sử dụng bài tập cho nhiều lớp
+- [x] Task 12.1: Sao chép bài tập sang lớp khác
 - [ ] Task 12.1: Chức năng duplicate bài tập
 - [ ] Task 12.2: Chỉnh sửa thông tin khi sao chép
 - [ ] Task 12.3: Sao chép sang lớp khác
