@@ -103,10 +103,10 @@ Mô tả: Lưu trữ và quản lý thông tin lớp học, dữ liệu nền t�
 
 #### UC5: Mời Học sinh vào Lớp
 Mô tả: Nhiều cách thức mời học sinh tham gia
-- [ ] Task 5.1: Tạo mã code 6-8 ký tự duy nhất
-- [ ] Task 5.2: Tạo liên kết mời có thể chia sẻ
-- [ ] Task 5.3: Gửi lời mời qua email (tùy chọn)
-- [ ] Task 5.4: Quản lý danh sách lời mời đã gửi
+- [x] Task 5.1: Tạo mã code 6-8 ký tự duy nhất
+- [x] Task 5.2: Tạo liên kết mời có thể chia sẻ
+- [x] Task 5.3: Gửi lời mời qua email (tùy chọn)
+- [x] Task 5.4: Quản lý danh sách lời mời đã gửi
 
 #### UC6: Quản lý Danh sách Học sinh
 Mô tả: Xem và quản lý học sinh trong lớp

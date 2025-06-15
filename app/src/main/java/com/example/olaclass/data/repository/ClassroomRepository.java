@@ -35,6 +35,34 @@ public class ClassroomRepository {
         return classroomRef.get();
     }
 
+    // Tạo liên kết mời có thể chia sẻ cho lớp học dựa trên mã code đã lưu
+    public Task<String> getInviteLink(String classId) {
+        return classroomRef.document(classId).get().continueWith(task -> {
+            if (task.isSuccessful() && task.getResult() != null && task.getResult().contains("inviteCode")) {
+                String code = task.getResult().getString("inviteCode");
+                // Có thể tuỳ chỉnh domain/app link theo thực tế triển khai
+                return "https://olaclass.app/invite?code=" + code;
+            } else {
+                return null;
+            }
+        });
+    }
+
+    // Tạo mã code mời lớp học duy nhất, lưu vào Firestore
+    public Task<String> generateAndSaveUniqueInviteCode(String classId) {
+        String code = com.example.olaclass.utils.InviteCodeUtil.generateCode();
+        // Kiểm tra trùng code
+        return classroomRef.whereEqualTo("inviteCode", code).get().continueWithTask(task -> {
+            if (task.isSuccessful() && task.getResult() != null && !task.getResult().isEmpty()) {
+                // Nếu trùng, thử lại đệ quy
+                return generateAndSaveUniqueInviteCode(classId);
+            } else {
+                // Không trùng, lưu vào lớp học
+                return classroomRef.document(classId).update("inviteCode", code).continueWith(t -> code);
+            }
+        });
+    }
+
     // Thêm học sinh vào lớp (collection con 'students')
     public Task<DocumentReference> addStudentToClass(String classId, String studentId, String studentName) {
         Map<String, Object> data = new HashMap<>();
@@ -46,6 +74,20 @@ public class ClassroomRepository {
     // Xóa học sinh khỏi lớp
     public Task<Void> removeStudentFromClass(String classId, String studentDocId) {
         return classroomRef.document(classId).collection("students").document(studentDocId).delete();
+    }
+
+    // Gửi lời mời qua email (lưu vào collection con 'invites')
+    public Task<DocumentReference> sendInvite(String classId, String email) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("email", email);
+        data.put("status", "pending");
+        data.put("sentAt", System.currentTimeMillis());
+        return classroomRef.document(classId).collection("invites").add(data);
+    }
+
+    // Lấy danh sách lời mời đã gửi của lớp học
+    public CollectionReference getInvites(String classId) {
+        return classroomRef.document(classId).collection("invites");
     }
 
     // Thêm bài tập vào lớp (collection con 'assignments')
