@@ -222,8 +222,8 @@ Mô tả: Truy cập thông tin và tài liệu
 - [x] Task 28.2: Triển khai Repository pattern
 - [x] Task 28.3: Xây dựng lớp Resource wrapper cho API responses
 - [x] Task 28.4: Triển khai ViewBinding cho các màn hình
-- [ ] Task 28.5: Xây dựng lớp Event wrapper cho singleLiveEvents
-- [ ] Task 28.6: Triển khai Data Binding
+- [x] Task 28.5: Xây dựng lớp Event wrapper cho singleLiveEvents
+- [x] Task 28.6: Triển khai Data Binding
 - [ ] Task 28.7: Xử lý lỗi và loading states
 - [ ] Task 28.8: Tích hợp Dependency Injection với Hilt
 
