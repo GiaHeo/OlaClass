@@ -4,15 +4,38 @@
 OlaClass là ứng dụng quản lý lớp học trực tuyến cho phép giáo viên tạo và quản lý bài tập/bài kiểm tra ngay trong ứng dụng, học sinh làm bài và nhận phản hồi một cách hiệu quả.
 
 ### Công nghệ sử dụng
-- Backend: Firebase (Authentication, Firestore)
-- Thông báo: Firebase Cloud Messaging
-- Lưu trữ: Firebase Storage (cho tài liệu)
+- **Backend**: Firebase (Authentication, Firestore, Storage, Cloud Messaging)
+- **Kiến trúc**: MVVM (Model-View-ViewModel)
+- **Ngôn ngữ**: Java
+- **Thư viện chính**:
+  - AndroidX (AppCompat, Material, ConstraintLayout)
+  - ViewModel & LiveData
+  - Navigation Component
+  - Glide (tải ảnh)
+  - CircleImageView (hiển thị ảnh đại diện)
+  - Gson (chuyển đổi JSON)
+
+### Cấu trúc thư mục
+```
+app/
+├── data/
+│   ├── model/      # Data classes
+│   ├── remote/     # API clients, Firebase services
+│   └── repository/ # Repository pattern implementation
+├── di/             # Dependency injection
+├── ui/
+│   ├── auth/      # Authentication screens
+│   ├── teacher/    # Teacher features
+│   ├── student/    # Student features
+│   ├── shared/     # Shared components
+│   └── base/       # Base classes
+└── utils/          # Utility classes
+```
 
 
 ## Danh sách User Cases và Tasks
 
 ### 1. Xác thực và Quản lý Hồ sơ
-
 #### UC1: Đăng ký/Đăng nhập với Vai trò
 Mô tả: Hệ thống xác thực người dùng với phân biệt vai trò rõ ràng
 - [ ] Task 1.1: Thiết kế UI màn hình đăng nhập/đăng ký
@@ -190,3 +213,48 @@ Mô tả: Truy cập thông tin và tài liệu
 - [ ] Task 27.1: Danh mục tài liệu theo môn/chủ đề
 - [ ] Task 27.2: Download/xem trực tuyến
 - [ ] Task 27.3: Bookmark tài liệu quan trọng
+
+
+### 4. Cơ sở hạ tầng và Hỗ trợ
+
+#### Cơ sở MVVM và Kiến trúc
+- [x] Task 28.1: Thiết lập base classes (BaseActivity, BaseFragment, BaseViewModel)
+- [ ] Task 28.2: Triển khai Repository pattern
+- [ ] Task 28.3: Xây dựng lớp Resource wrapper cho API responses
+- [ ] Task 28.4: Triển khai ViewBinding cho các màn hình
+- [ ] Task 28.5: Xây dựng lớp Event wrapper cho singleLiveEvents
+- [ ] Task 28.6: Triển khai Data Binding
+- [ ] Task 28.7: Xử lý lỗi và loading states
+- [ ] Task 28.8: Tích hợp Dependency Injection với Hilt
+
+#### Đa ngôn ngữ
+- [ ] Task 29.1: Tạo file strings.xml cho tiếng Anh (en) và tiếng Việt (vi)
+- [ ] Task 29.2: Tạo utility class quản lý ngôn ngữ
+- [ ] Task 29.3: Xây dựng giao diện chuyển đổi ngôn ngữ
+- [ ] Task 29.4: Lưu cài đặt ngôn ngữ vào SharedPreferences
+- [ ] Task 29.5: Áp dụng đa ngôn ngữ cho tất cả màn hình
+- [ ] Task 29.6: Kiểm thử với các ngôn ngữ khác nhau
+
+#### Tối ưu hiệu năng
+- [ ] Task 30.1: Phân tích và tối ưu thời gian khởi động ứng dụng
+- [ ] Task 30.2: Tối ưu bộ nhớ và kích thước APK
+- [ ] Task 30.3: Triển khai phân trang (Paging) cho danh sách lớn
+- [ ] Task 30.4: Tối ưu hình ảnh và tài nguyên
+
+#### Bảo mật
+- [ ] Task 31.1: Mã hóa dữ liệu nhạy cảm
+- [ ] Task 31.2: Bảo vệ API keys với Android Keystore
+- [ ] Task 31.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
+- [ ] Task 31.4: Triển khai SSL Pinning
+
+#### Kiểm thử
+- [ ] Task 32.1: Viết Unit Tests cho ViewModels
+- [ ] Task 32.2: Viết Instrumentation Tests cho các màn hình chính
+- [ ] Task 32.3: Kiểm thử hồi quy tự động
+- [ ] Task 32.4: Kiểm thử hiệu năng
+
+#### Triển khai
+- [ ] Task 33.1: Thiết lập CI/CD với GitHub Actions
+- [ ] Task 33.2: Tự động hóa quá trình đóng gói và phân phối
+- [ ] Task 33.3: Cấu hình môi trường (dev, staging, production)
+- [ ] Task 33.4: Theo dõi crash và analytics
