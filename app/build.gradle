@@ -27,7 +27,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -89,7 +90,6 @@ dependencies {
     // Hilt for Dependency Injection
     implementation 'com.google.dagger:hilt-android:2.50'
     annotationProcessor 'com.google.dagger:hilt-compiler:2.50'
-    kapt 'com.google.dagger:hilt-compiler:2.50'
     
     // For Java compatibility
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -8,7 +8,7 @@
     <string name="email">Email</string>
     <string name="teacher">Giáo viên</string>
     <string name="student">Học sinh</string>
-    <string name="class">Lớp học</string>
+    <string name="class_label">Lớp học</string>
     <string name="assignment">Bài tập</string>
     <string name="submit">Nộp bài</string>
     <string name="score">Điểm</string>

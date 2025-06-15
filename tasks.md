@@ -55,8 +55,8 @@ app/
 - [x] Task 2.6: Kiểm thử với các ngôn ngữ khác nhau
 
 #### 1.3. Tối ưu hiệu năng
-- [ ] Task 3.1: Phân tích và tối ưu thời gian khởi động ứng dụng
-- [ ] Task 3.2: Tối ưu bộ nhớ và kích thước APK
+- [x] Task 3.1: Phân tích và tối ưu thời gian khởi động ứng dụng
+- [x] Task 3.2: Tối ưu bộ nhớ và kích thước APK
 - [ ] Task 3.3: Triển khai phân trang (Paging) cho danh sách lớn
 - [ ] Task 3.4: Tối ưu hình ảnh và tài nguyên
 

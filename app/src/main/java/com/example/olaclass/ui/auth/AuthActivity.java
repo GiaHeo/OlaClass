@@ -6,8 +6,9 @@ import androidx.annotation.Nullable;
 import com.example.olaclass.databinding.ActivityAuthBinding;
 import com.example.olaclass.ui.base.BaseActivity;
 import com.example.olaclass.ui.base.BaseViewModel;
+import com.example.olaclass.ui.auth.AuthViewModel;
 
-public class AuthActivity extends BaseActivity<ActivityAuthBinding, BaseViewModel> {
+public class AuthActivity extends BaseActivity<ActivityAuthBinding, AuthViewModel> {
     private static final String TAG = "StartupTime";
 
     @Override
@@ -16,8 +17,8 @@ public class AuthActivity extends BaseActivity<ActivityAuthBinding, BaseViewMode
     }
 
     @Override
-    protected Class<BaseViewModel> getViewModelClass() {
-        return BaseViewModel.class;
+    protected Class<AuthViewModel> getViewModelClass() {
+        return AuthViewModel.class;
     }
 
     @Override
