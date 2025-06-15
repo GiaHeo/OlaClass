@@ -138,32 +138,32 @@ Mô tả: Giáo viên có thể tạo và cấu hình lớp học
 
 #### UC6: Mời Học sinh vào Lớp
 Mô tả: Nhiều cách thức mời học sinh tham gia
-- [ ] Task 6.1: Tạo mã code 6-8 ký tự duy nhất
-- [ ] Task 6.2: Tạo liên kết mời có thể chia sẻ
-- [ ] Task 6.3: Gửi lời mời qua email (tùy chọn)
-- [ ] Task 6.4: Quản lý danh sách lời mời đã gửi
+- [x] Task 6.1: Tạo mã code 6-8 ký tự duy nhất
+- [x] Task 6.2: Tạo liên kết mời có thể chia sẻ
+- [x] Task 6.3: Gửi lời mời qua email (tùy chọn)
+- [x] Task 6.4: Quản lý danh sách lời mời đã gửi
 
 #### UC7: Quản lý Danh sách Học sinh
 Mô tả: Xem và quản lý học sinh trong lớp
-- [ ] Task 7.1: Hiển thị danh sách học sinh với thông tin cơ bản
-- [ ] Task 7.2: Xem profile chi tiết của từng học sinh
-- [ ] Task 7.3: Chức năng xóa học sinh khỏi lớp
-- [ ] Task 7.4: Thống kê tình hình học tập của học sinh
+- [x] Task 7.1: Hiển thị danh sách học sinh với thông tin cơ bản
+- [x] Task 7.2: Xem profile chi tiết của từng học sinh
+- [x] Task 7.3: Chức năng xóa học sinh khỏi lớp
+- [x] Task 7.4: Thống kê tình hình học tập của học sinh
 
 #### Quản lý Bài tập
 #### UC8: Tạo Bài tập Mới
 Mô tả: Tạo bài tập với nhiều loại khác nhau
-- [ ] Task 8.1: Form tạo bài tập (tiêu đề, mô tả, loại bài tập)
-- [ ] Task 8.2: Phân loại bài tập (thường, kiểm tra, project)
-- [ ] Task 8.3: Gán bài tập cho một hoặc nhiều lớp
-- [ ] Task 8.4: Preview bài tập trước khi xuất bản
+- [x] Task 8.1: Form tạo bài tập (tiêu đề, mô tả, loại bài tập)
+- [x] Task 8.2: Phân loại bài tập (thường, kiểm tra, project)
+- [x] Task 8.3: Gán bài tập cho một hoặc nhiều lớp
+- [x] Task 8.4: Preview bài tập trước khi xuất bản
 
 #### UC9: Tạo Bài kiểm tra/Bài tập Tùy chỉnh trong Ứng dụng
 Mô tả: Xây dựng giao diện và logic tạo bài kiểm tra/bài tập trực tiếp trong ứng dụng
-- [ ] Task 9.1: Thiết kế UI tạo câu hỏi (trắc nghiệm, tự luận, điền vào chỗ trống)
-- [ ] Task 9.2: Lưu trữ cấu trúc bài kiểm tra/bài tập trong Firestore
-- [ ] Task 9.3: Chức năng thêm/sửa/xóa câu hỏi và đáp án
-- [ ] Task 9.4: Xử lý logic chấm điểm tự động (cho câu hỏi trắc nghiệm)
+- [x] Task 9.1: Tạo giao diện tạo bài kiểm tra/bài tập (UI builder)
+- [x] Task 9.2: Hỗ trợ nhiều loại câu hỏi (tự luận, trắc nghiệm, điền vào chỗ trống)
+- [x] Task 9.3: Chức năng thêm/sửa/xóa câu hỏi và đáp án
+- [x] Task 9.4: Xử lý logic chấm điểm tự động (cho câu hỏi trắc nghiệm)
 
 #### UC10: Thiết lập Hạn nộp
 Mô tả: Quản lý thời gian nộp bài linh hoạt
@@ -244,7 +244,7 @@ Mô tả: Dashboard bài tập với trạng thái rõ ràng
 
 #### UC21-22: Làm và Nộp Bài tập trong Ứng dụng
 Mô tả: Trải nghiệm làm bài mượt mà ngay trong ứng dụng
-- [ ] Task 21.1: Giao diện làm bài kiểm tra/bài tập tùy chỉnh
+- [x] Task 21.1: Giao diện làm bài kiểm tra/bài tập tùy chỉnh
 - [ ] Task 21.2: Lưu tạm khi làm bài dở
 - [ ] Task 21.3: Xác nhận trước khi nộp bài
 - [ ] Task 21.4: Thông báo nộp bài thành công
