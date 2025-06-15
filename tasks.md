@@ -57,14 +57,14 @@ app/
 #### 1.3. Tối ưu hiệu năng
 - [x] Task 3.1: Phân tích và tối ưu thời gian khởi động ứng dụng
 - [x] Task 3.2: Tối ưu bộ nhớ và kích thước APK
-- [ ] Task 3.3: Triển khai phân trang (Paging) cho danh sách lớn
+- [x] Task 3.3: Triển khai phân trang (Paging) cho danh sách lớn
 - [ ] Task 3.4: Tối ưu hình ảnh và tài nguyên
 
 #### 1.4. Bảo mật
 - [x] Task 4.1: Mã hóa dữ liệu nhạy cảm
 - [x] Task 4.2: Bảo vệ API keys với Android Keystore
 - [x] Task 4.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
-- [ ] Task 4.4: Triển khai SSL Pinning
+- [x] Task 4.4: Triển khai SSL Pinning
 
 ---
 
