@@ -33,9 +33,44 @@ app/
 ```
 
 
-## Danh sách User Cases và Tasks
+## Danh sách Task Ưu Tiên
 
-### 1. Xác thực và Quản lý Hồ sơ
+### 1. Cơ sở hạ tầng & Hỗ trợ (Infrastructure & Support)
+#### 1.1. Cơ sở MVVM và Kiến trúc
+- [x] Task 1.1: Thiết lập base classes (BaseActivity, BaseFragment, BaseViewModel)
+- [x] Task 1.2: Triển khai Repository pattern
+- [x] Task 1.3: Xây dựng lớp Resource wrapper cho API responses
+- [x] Task 1.4: Triển khai ViewBinding cho các màn hình
+- [x] Task 1.5: Xây dựng lớp Event wrapper cho singleLiveEvents
+- [x] Task 1.6: Triển khai Data Binding
+- [x] Task 1.7: Xử lý lỗi và loading states
+- [x] Task 1.8: Tích hợp Dependency Injection với Hilt
+
+#### 1.2. Đa ngôn ngữ
+- [x] Task 2.1: Tạo file strings.xml cho tiếng Anh (en) và tiếng Việt (vi)
+- [x] Task 2.2: Tạo utility class quản lý ngôn ngữ
+- [x] Task 2.3: Xây dựng giao diện chuyển đổi ngôn ngữ
+- [x] Task 2.4: Lưu cài đặt ngôn ngữ vào SharedPreferences
+- [x] Task 2.5: Áp dụng đa ngôn ngữ cho tất cả màn hình
+- [x] Task 2.6: Kiểm thử với các ngôn ngữ khác nhau
+
+#### 1.3. Tối ưu hiệu năng
+- [ ] Task 3.1: Phân tích và tối ưu thời gian khởi động ứng dụng
+- [ ] Task 3.2: Tối ưu bộ nhớ và kích thước APK
+- [ ] Task 3.3: Triển khai phân trang (Paging) cho danh sách lớn
+- [ ] Task 3.4: Tối ưu hình ảnh và tài nguyên
+
+#### 1.4. Bảo mật
+- [ ] Task 4.1: Mã hóa dữ liệu nhạy cảm
+- [ ] Task 4.2: Bảo vệ API keys với Android Keystore
+- [ ] Task 4.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
+- [ ] Task 4.4: Triển khai SSL Pinning
+
+---
+
+### 2. User Cases & Chức năng nghiệp vụ
+
+### 2.1. Xác thực và Quản lý Hồ sơ
 #### UC1: Đăng ký/Đăng nhập với Vai trò
 Mô tả: Hệ thống xác thực người dùng với phân biệt vai trò rõ ràng
 - [ ] Task 1.1: Thiết kế UI màn hình đăng nhập/đăng ký
@@ -224,16 +259,16 @@ Mô tả: Truy cập thông tin và tài liệu
 - [x] Task 28.4: Triển khai ViewBinding cho các màn hình
 - [x] Task 28.5: Xây dựng lớp Event wrapper cho singleLiveEvents
 - [x] Task 28.6: Triển khai Data Binding
-- [ ] Task 28.7: Xử lý lỗi và loading states
+- [x] Task 28.7: Xử lý lỗi và loading states
 - [ ] Task 28.8: Tích hợp Dependency Injection với Hilt
 
 #### Đa ngôn ngữ
-- [ ] Task 29.1: Tạo file strings.xml cho tiếng Anh (en) và tiếng Việt (vi)
-- [ ] Task 29.2: Tạo utility class quản lý ngôn ngữ
-- [ ] Task 29.3: Xây dựng giao diện chuyển đổi ngôn ngữ
-- [ ] Task 29.4: Lưu cài đặt ngôn ngữ vào SharedPreferences
-- [ ] Task 29.5: Áp dụng đa ngôn ngữ cho tất cả màn hình
-- [ ] Task 29.6: Kiểm thử với các ngôn ngữ khác nhau
+- [x] Task 29.1: Tạo file strings.xml cho tiếng Anh (en) và tiếng Việt (vi)
+- [x] Task 29.2: Tạo utility class quản lý ngôn ngữ
+- [x] Task 29.3: Xây dựng giao diện chuyển đổi ngôn ngữ
+- [x] Task 29.4: Lưu cài đặt ngôn ngữ vào SharedPreferences
+- [x] Task 29.5: Áp dụng đa ngôn ngữ cho tất cả màn hình
+- [x] Task 29.6: Kiểm thử với các ngôn ngữ khác nhau
 
 #### Tối ưu hiệu năng
 - [ ] Task 30.1: Phân tích và tối ưu thời gian khởi động ứng dụng

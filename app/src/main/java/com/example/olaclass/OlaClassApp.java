@@ -5,5 +5,12 @@ import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
 public class OlaClassApp extends Application {
-    // Không cần code khởi tạo thủ công cho Dagger Hilt
+    public static long appStartTime = 0;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appStartTime = System.currentTimeMillis();
+        // Các khởi tạo khác nếu cần
+    }
 }
