@@ -62,6 +62,14 @@
         <!-- Language Switcher Activity -->
         <activity android:name=".ui.shared.LanguageActivity" />
         
+        <activity android:name=".ui.auth.AuthActivity" />
+        <activity android:name=".ui.classroom.ClassroomListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
     </application>
 
 </manifest>

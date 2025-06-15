@@ -61,9 +61,9 @@ app/
 - [ ] Task 3.4: Tối ưu hình ảnh và tài nguyên
 
 #### 1.4. Bảo mật
-- [ ] Task 4.1: Mã hóa dữ liệu nhạy cảm
-- [ ] Task 4.2: Bảo vệ API keys với Android Keystore
-- [ ] Task 4.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
+- [x] Task 4.1: Mã hóa dữ liệu nhạy cảm
+- [x] Task 4.2: Bảo vệ API keys với Android Keystore
+- [x] Task 4.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
 - [ ] Task 4.4: Triển khai SSL Pinning
 
 ---

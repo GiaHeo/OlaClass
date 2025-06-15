@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.preference.PreferenceManager;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys; // Thêm thư viện mã hóa
+// import android.preference.PreferenceManager; (loại bỏ dòng này)
 import java.util.Locale;
 
 public class LanguageManager {
@@ -17,12 +19,12 @@ public class LanguageManager {
     }
 
     public static String getLanguage(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = getEncryptedPrefs(context);
         return prefs.getString(PREF_LANGUAGE, Locale.getDefault().getLanguage());
     }
 
     private static void persistLanguage(Context context, String language) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences prefs = getEncryptedPrefs(context);
         prefs.edit().putString(PREF_LANGUAGE, language).apply();
     }
 
