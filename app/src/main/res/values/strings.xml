@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">OlaClass</string>
+    <string name="login">Đăng nhập</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="register">Đăng ký</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="password">Mật khẩu</string>
+    <string name="email">Email</string>
+    <string name="teacher">Giáo viên</string>
+    <string name="student">Học sinh</string>
+    <string name="class">Lớp học</string>
+    <string name="assignment">Bài tập</string>
+    <string name="submit">Nộp bài</string>
+    <string name="score">Điểm</string>
+    <string name="success">Thành công</string>
+    <string name="error">Lỗi</string>
+    <string name="loading">Đang tải...</string>
+    <string name="retry">Thử lại</string>
+    <string name="cancel">Hủy</string>
+    <string name="ok">OK</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="settings">Cài đặt</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
 </resources>
