@@ -117,9 +117,9 @@ Mô tả: Xem và quản lý học sinh trong lớp
 
 #### UC7: Quản lý Bài tập
 Mô tả: Tạo, giao, quản lý bài tập cho lớp học
-- [ ] Task 7.1: Tạo bài tập mới
-- [ ] Task 7.2: Giao bài tập cho học sinh
-- [ ] Task 7.3: Theo dõi, chấm điểm bài tập
+- [x] Task 7.1: Tạo bài tập mới
+- [x] Task 7.2: Giao bài tập cho học sinh
+- [x] Task 7.3: Theo dõi, chấm điểm bài tập
 
 #### UC8: Cài đặt Thông báo
 Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận được

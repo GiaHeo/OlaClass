@@ -105,7 +105,38 @@ public class ClassroomRepository {
         return classroomRef.document(classId).collection("invites");
     }
 
+    // Tạo bài tập mới cho lớp (collection con 'assignments')
+    public Task<DocumentReference> createAssignment(String classId, Map<String, Object> assignmentData) {
+        return classroomRef.document(classId).collection("assignments").add(assignmentData);
+    }
+
+    // Giao bài tập cho học sinh (sub-collection 'submissions' trong assignment)
+    public Task<DocumentReference> assignToStudent(String classId, String assignmentId, String studentId, Map<String, Object> submissionData) {
+        return classroomRef.document(classId)
+                .collection("assignments").document(assignmentId)
+                .collection("submissions").document(studentId).set(submissionData)
+                .continueWith(task -> classroomRef.document(classId)
+                        .collection("assignments").document(assignmentId)
+                        .collection("submissions").document(studentId));
+    }
+
+    // Theo dõi/truy vấn bài nộp của học sinh
+    public CollectionReference getAssignmentSubmissions(String classId, String assignmentId) {
+        return classroomRef.document(classId)
+                .collection("assignments").document(assignmentId)
+                .collection("submissions");
+    }
+
+    // Chấm điểm bài tập (update submission)
+    public Task<Void> gradeSubmission(String classId, String assignmentId, String studentId, Map<String, Object> gradeData) {
+        return classroomRef.document(classId)
+                .collection("assignments").document(assignmentId)
+                .collection("submissions").document(studentId)
+                .update(gradeData);
+    }
+
     // Thêm bài tập vào lớp (collection con 'assignments')
+    @Deprecated
     public Task<DocumentReference> addAssignmentToClass(String classId, Map<String, Object> assignmentData) {
         return classroomRef.document(classId).collection("assignments").add(assignmentData);
     }
