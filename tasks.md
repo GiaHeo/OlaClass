@@ -70,7 +70,7 @@ app/
 
 ### 2. User Cases & Chức năng nghiệp vụ
 
-### 2.1. Xác thực và Quản lý Hồ sơ
+### 1. Xác thực, Hồ sơ và Thông báo (Đã hoàn thành)
 #### UC1: Đăng ký/Đăng nhập với Vai trò
 Mô tả: Hệ thống xác thực người dùng với phân biệt vai trò rõ ràng
 - [x] Task 1.1: Thiết kế UI màn hình đăng nhập/đăng ký
@@ -94,11 +94,70 @@ Mô tả: Hệ thống thông báo đa kênh
 - [x] Task 3.3: Xây dựng logic gửi thông báo tự động
 - [ ] Task 3.4: Tích hợp thông báo email (tùy chọn)
 
-#### UC4: Cài đặt Thông báo
+
+### 2. Nghiệp vụ lớp học (Chưa hoàn thành)
+#### UC4: Quản lý Lớp học
+Mô tả: Lưu trữ và quản lý thông tin lớp học, dữ liệu nền tảng
+- [x] Task 4.1: Lưu trữ thông tin lớp học trong Firestore
+- [x] Task 4.2: Tạo collection con cho học sinh và bài tập
+
+#### UC5: Mời Học sinh vào Lớp
+Mô tả: Nhiều cách thức mời học sinh tham gia
+- [ ] Task 5.1: Tạo mã code 6-8 ký tự duy nhất
+- [ ] Task 5.2: Tạo liên kết mời có thể chia sẻ
+- [ ] Task 5.3: Gửi lời mời qua email (tùy chọn)
+- [ ] Task 5.4: Quản lý danh sách lời mời đã gửi
+
+#### UC6: Quản lý Danh sách Học sinh
+Mô tả: Xem và quản lý học sinh trong lớp
+- [ ] Task 6.1: Hiển thị danh sách học sinh với thông tin cơ bản
+- [ ] Task 6.2: Xem profile chi tiết của từng học sinh
+- [ ] Task 6.3: Chức năng xóa học sinh khỏi lớp
+- [ ] Task 6.4: Thống kê tình hình học tập của học sinh
+
+#### UC7: Quản lý Bài tập
+Mô tả: Tạo, giao, quản lý bài tập cho lớp học
+- [ ] Task 7.1: Tạo bài tập mới
+- [ ] Task 7.2: Giao bài tập cho học sinh
+- [ ] Task 7.3: Theo dõi, chấm điểm bài tập
+
+#### UC8: Cài đặt Thông báo
 Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận được
-- [ ] Task 4.1: Tạo giao diện cài đặt thông báo
-- [ ] Task 4.2: Lưu preferences của người dùng
-- [ ] Task 4.3: Áp dụng cài đặt vào logic gửi thông báo
+- [ ] Task 8.1: Tạo giao diện cài đặt thông báo
+- [ ] Task 8.2: Lưu preferences của người dùng
+- [ ] Task 8.3: Áp dụng cài đặt vào logic gửi thông báo
+
+
+#### UC1: Quản lý Lớp học
+Mô tả: Lưu trữ và quản lý thông tin lớp học, dữ liệu nền tảng
+- [ ] Task 1.1: Lưu trữ thông tin lớp học trong Firestore
+- [ ] Task 1.2: Tạo collection con cho học sinh và bài tập
+
+#### UC2: Mời Học sinh vào Lớp
+Mô tả: Nhiều cách thức mời học sinh tham gia
+- [ ] Task 2.1: Tạo mã code 6-8 ký tự duy nhất
+- [ ] Task 2.2: Tạo liên kết mời có thể chia sẻ
+- [ ] Task 2.3: Gửi lời mời qua email (tùy chọn)
+- [ ] Task 2.4: Quản lý danh sách lời mời đã gửi
+
+#### UC3: Quản lý Danh sách Học sinh
+Mô tả: Xem và quản lý học sinh trong lớp
+- [ ] Task 3.1: Hiển thị danh sách học sinh với thông tin cơ bản
+- [ ] Task 3.2: Xem profile chi tiết của từng học sinh
+- [ ] Task 3.3: Chức năng xóa học sinh khỏi lớp
+- [ ] Task 3.4: Thống kê tình hình học tập của học sinh
+
+#### UC4: Quản lý Bài tập
+Mô tả: Tạo, giao, quản lý bài tập cho lớp học
+- [ ] Task 4.1: Tạo bài tập mới
+- [ ] Task 4.2: Giao bài tập cho học sinh
+- [ ] Task 4.3: Theo dõi, chấm điểm bài tập
+
+#### UC5: Cài đặt Thông báo
+Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận được
+- [ ] Task 5.1: Tạo giao diện cài đặt thông báo
+- [ ] Task 5.2: Lưu preferences của người dùng
+- [ ] Task 5.3: Áp dụng cài đặt vào logic gửi thông báo
 
 
 ### 2. Chức năng Giáo viên
