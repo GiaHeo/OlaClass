@@ -123,9 +123,9 @@ Mô tả: Tạo, giao, quản lý bài tập cho lớp học
 
 #### UC8: Cài đặt Thông báo
 Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận được
-- [ ] Task 8.1: Tạo giao diện cài đặt thông báo
-- [ ] Task 8.2: Lưu preferences của người dùng
-- [ ] Task 8.3: Áp dụng cài đặt vào logic gửi thông báo
+- [x] Task 8.1: Tạo giao diện cài đặt thông báo
+- [x] Task 8.2: Lưu preferences của người dùng
+- [x] Task 8.3: Áp dụng cài đặt vào logic gửi thông báo
 
 
 #### UC1: Quản lý Lớp học

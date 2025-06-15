@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cài đặt thông báo"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAssignment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhận thông báo bài tập mới" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swAttendance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhận thông báo điểm danh" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/swGeneral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhận thông báo chung" />
+
+</LinearLayout>
