@@ -58,7 +58,6 @@ app/
 - [x] Task 3.1: Phân tích và tối ưu thời gian khởi động ứng dụng
 - [x] Task 3.2: Tối ưu bộ nhớ và kích thước APK
 - [x] Task 3.3: Triển khai phân trang (Paging) cho danh sách lớn
-- [ ] Task 3.4: Tối ưu hình ảnh và tài nguyên
 
 #### 1.4. Bảo mật
 - [x] Task 4.1: Mã hóa dữ liệu nhạy cảm
@@ -92,8 +91,6 @@ Mô tả: Hệ thống thông báo đa kênh
 - [x] Task 3.1: Tích hợp Firebase Cloud Messaging
 - [x] Task 3.2: Thiết kế template thông báo
 - [x] Task 3.3: Xây dựng logic gửi thông báo tự động
-- [ ] Task 3.4: Tích hợp thông báo email (tùy chọn)
-
 
 ### 2. Nghiệp vụ lớp học (Chưa hoàn thành)
 #### UC4: Quản lý Lớp học
@@ -128,47 +125,16 @@ Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận đư�
 - [x] Task 8.3: Áp dụng cài đặt vào logic gửi thông báo
 
 
-#### UC1: Quản lý Lớp học
-Mô tả: Lưu trữ và quản lý thông tin lớp học, dữ liệu nền tảng
-- [ ] Task 1.1: Lưu trữ thông tin lớp học trong Firestore
-- [ ] Task 1.2: Tạo collection con cho học sinh và bài tập
-
-#### UC2: Mời Học sinh vào Lớp
-Mô tả: Nhiều cách thức mời học sinh tham gia
-- [ ] Task 2.1: Tạo mã code 6-8 ký tự duy nhất
-- [ ] Task 2.2: Tạo liên kết mời có thể chia sẻ
-- [ ] Task 2.3: Gửi lời mời qua email (tùy chọn)
-- [ ] Task 2.4: Quản lý danh sách lời mời đã gửi
-
-#### UC3: Quản lý Danh sách Học sinh
-Mô tả: Xem và quản lý học sinh trong lớp
-- [ ] Task 3.1: Hiển thị danh sách học sinh với thông tin cơ bản
-- [ ] Task 3.2: Xem profile chi tiết của từng học sinh
-- [ ] Task 3.3: Chức năng xóa học sinh khỏi lớp
-- [ ] Task 3.4: Thống kê tình hình học tập của học sinh
-
-#### UC4: Quản lý Bài tập
-Mô tả: Tạo, giao, quản lý bài tập cho lớp học
-- [ ] Task 4.1: Tạo bài tập mới
-- [ ] Task 4.2: Giao bài tập cho học sinh
-- [ ] Task 4.3: Theo dõi, chấm điểm bài tập
-
-#### UC5: Cài đặt Thông báo
-Mô tả: Người dùng có thể tùy chỉnh loại thông báo nhận được
-- [ ] Task 5.1: Tạo giao diện cài đặt thông báo
-- [ ] Task 5.2: Lưu preferences của người dùng
-- [ ] Task 5.3: Áp dụng cài đặt vào logic gửi thông báo
-
 
 ### 2. Chức năng Giáo viên
 
 #### Quản lý Lớp học
 #### UC5: Tạo Lớp học Mới
 Mô tả: Giáo viên có thể tạo và cấu hình lớp học
-- [ ] Task 5.1: Thiết kế form tạo lớp học (tên, mô tả, môn học)
-- [ ] Task 5.2: Tạo mã code tham gia duy nhất cho lớp
-- [ ] Task 5.3: Lưu trữ thông tin lớp học trong Firestore
-- [ ] Task 5.4: Tạo collection con cho học sinh và bài tập
+- [x] Task 5.1: Thiết kế form tạo lớp học (tên, mô tả, môn học)
+- [x] Task 5.2: Tạo mã code tham gia duy nhất cho lớp
+- [x] Task 5.3: Lưu trữ thông tin lớp học trong Firestore
+- [x] Task 5.4: Tạo collection con cho học sinh và bài tập
 
 #### UC6: Mời Học sinh vào Lớp
 Mô tả: Nhiều cách thức mời học sinh tham gia
@@ -308,7 +274,6 @@ Mô tả: Truy cập thông tin và tài liệu
 - [ ] Task 27.2: Download/xem trực tuyến
 - [ ] Task 27.3: Bookmark tài liệu quan trọng
 
-
 ### 4. Cơ sở hạ tầng và Hỗ trợ
 
 #### Cơ sở MVVM và Kiến trúc
@@ -333,22 +298,5 @@ Mô tả: Truy cập thông tin và tài liệu
 - [ ] Task 30.1: Phân tích và tối ưu thời gian khởi động ứng dụng
 - [ ] Task 30.2: Tối ưu bộ nhớ và kích thước APK
 - [ ] Task 30.3: Triển khai phân trang (Paging) cho danh sách lớn
-- [ ] Task 30.4: Tối ưu hình ảnh và tài nguyên
+- [x] Task 30.4: Tối ưu hình ảnh và tài nguyên
 
-#### Bảo mật
-- [ ] Task 31.1: Mã hóa dữ liệu nhạy cảm
-- [ ] Task 31.2: Bảo vệ API keys với Android Keystore
-- [ ] Task 31.3: Kiểm tra và khắc phục các lỗ hổng bảo mật
-- [ ] Task 31.4: Triển khai SSL Pinning
-
-#### Kiểm thử
-- [ ] Task 32.1: Viết Unit Tests cho ViewModels
-- [ ] Task 32.2: Viết Instrumentation Tests cho các màn hình chính
-- [ ] Task 32.3: Kiểm thử hồi quy tự động
-- [ ] Task 32.4: Kiểm thử hiệu năng
-
-#### Triển khai
-- [ ] Task 33.1: Thiết lập CI/CD với GitHub Actions
-- [ ] Task 33.2: Tự động hóa quá trình đóng gói và phân phối
-- [ ] Task 33.3: Cấu hình môi trường (dev, staging, production)
-- [ ] Task 33.4: Theo dõi crash và analytics
