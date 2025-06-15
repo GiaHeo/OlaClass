@@ -71,9 +71,24 @@ public class ClassroomRepository {
         return classroomRef.document(classId).collection("students").add(data);
     }
 
+    // Lấy danh sách học sinh trong lớp
+    public CollectionReference getStudents(String classId) {
+        return classroomRef.document(classId).collection("students");
+    }
+
+    // Lấy profile chi tiết của một học sinh trong lớp
+    public Task<DocumentSnapshot> getStudentProfile(String classId, String studentDocId) {
+        return classroomRef.document(classId).collection("students").document(studentDocId).get();
+    }
+
     // Xóa học sinh khỏi lớp
     public Task<Void> removeStudentFromClass(String classId, String studentDocId) {
         return classroomRef.document(classId).collection("students").document(studentDocId).delete();
+    }
+
+    // Đếm tổng số học sinh trong lớp
+    public Task<QuerySnapshot> countStudents(String classId) {
+        return classroomRef.document(classId).collection("students").get();
     }
 
     // Gửi lời mời qua email (lưu vào collection con 'invites')

@@ -110,10 +110,10 @@ Mô tả: Nhiều cách thức mời học sinh tham gia
 
 #### UC6: Quản lý Danh sách Học sinh
 Mô tả: Xem và quản lý học sinh trong lớp
-- [ ] Task 6.1: Hiển thị danh sách học sinh với thông tin cơ bản
-- [ ] Task 6.2: Xem profile chi tiết của từng học sinh
-- [ ] Task 6.3: Chức năng xóa học sinh khỏi lớp
-- [ ] Task 6.4: Thống kê tình hình học tập của học sinh
+- [x] Task 6.1: Hiển thị danh sách học sinh với thông tin cơ bản
+- [x] Task 6.2: Xem profile chi tiết của từng học sinh
+- [x] Task 6.3: Chức năng xóa học sinh khỏi lớp
+- [x] Task 6.4: Thống kê tình hình học tập của học sinh
 
 #### UC7: Quản lý Bài tập
 Mô tả: Tạo, giao, quản lý bài tập cho lớp học
