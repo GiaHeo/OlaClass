@@ -73,18 +73,18 @@ app/
 ### 2.1. Xác thực và Quản lý Hồ sơ
 #### UC1: Đăng ký/Đăng nhập với Vai trò
 Mô tả: Hệ thống xác thực người dùng với phân biệt vai trò rõ ràng
-- [ ] Task 1.1: Thiết kế UI màn hình đăng nhập/đăng ký
-- [ ] Task 1.2: Tích hợp Firebase Authentication
-- [ ] Task 1.3: Tạo form đăng ký với lựa chọn vai trò (Giáo viên/Học sinh)
-- [ ] Task 1.4: Xây dựng logic xác thực Google Sign-In
-- [ ] Task 1.5: Lưu trữ thông tin vai trò trong Firestore
-- [ ] Task 1.6: Xử lý điều hướng sau đăng nhập thành công
+- [x] Task 1.1: Thiết kế UI màn hình đăng nhập/đăng ký
+- [x] Task 1.2: Tích hợp Firebase Authentication
+- [x] Task 1.3: Tạo form đăng ký với lựa chọn vai trò (Giáo viên/Học sinh)
+- [x] Task 1.4: Xây dựng logic xác thực Google Sign-In
+- [x] Task 1.5: Lưu trữ thông tin vai trò trong Firestore
+- [x] Task 1.6: Xử lý điều hướng sau đăng nhập thành công
 
 #### UC2: Cập nhật Hồ sơ
 Mô tả: Cho phép người dùng chỉnh sửa thông tin cá nhân
-- [ ] Task 2.1: Tạo form cập nhật thông tin cá nhân
-- [ ] Task 2.2: Validation dữ liệu đầu vào
-- [ ] Task 2.3: Cập nhật dữ liệu trong Firestore
+- [x] Task 2.1: Tạo form cập nhật thông tin cá nhân
+- [x] Task 2.2: Validation dữ liệu đầu vào
+- [x] Task 2.3: Cập nhật dữ liệu trong Firestore
 - [ ] Task 2.4: Upload và quản lý ảnh đại diện
 
 #### UC3: Nhận Thông báo
