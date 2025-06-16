@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.olaclass.R;
 import com.example.olaclass.ui.MainActivity;
-import com.example.olaclass.ui.assignments.AssignmentsFragment;
+import com.example.olaclass.ui.assignments.AssignmentsStudentFragment;
 import com.example.olaclass.ui.classroom.ClassroomListFragmentStudent;
 import com.example.olaclass.ui.profile.ProfileFragment;
 import com.example.olaclass.utils.AuthUtils;
@@ -34,7 +34,7 @@ public class MainActivityStudent extends MainActivity {
             if (itemId == R.id.nav_my_classes) {
                 selectedFragment = ClassroomListFragmentStudent.newInstance("student");
             } else if (itemId == R.id.nav_assignments) {
-                selectedFragment = new AssignmentsFragment();
+                selectedFragment = new AssignmentsStudentFragment();
             } else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();
             }

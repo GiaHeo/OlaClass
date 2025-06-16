@@ -21,7 +21,6 @@ public class ClassroomInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_classroom_info, container, false);
         String classroomId = getArguments() != null ? getArguments().getString("classroomId") : "";
         TextView tvName = view.findViewById(R.id.tv_name);
-        TextView tvSubject = view.findViewById(R.id.tv_subject);
         TextView tvDescription = view.findViewById(R.id.tv_description);
         TextView tvInviteCode = view.findViewById(R.id.tv_invite_code);
 
@@ -32,7 +31,6 @@ public class ClassroomInfoFragment extends Fragment {
                 if (document.exists()) {
                     String inviteCode = document.getString("inviteCode");
                     tvName.setText(document.getString("name"));
-                    tvSubject.setText("Môn: " + document.getString("subject"));
                     tvDescription.setText(document.getString("description"));
                     tvInviteCode.setText("Mã mời: " + (inviteCode != null ? inviteCode : "N/A"));
 
