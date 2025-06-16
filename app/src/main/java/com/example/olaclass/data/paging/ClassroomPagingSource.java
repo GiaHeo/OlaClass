@@ -51,18 +51,45 @@ public class ClassroomPagingSource extends RxPagingSource<Integer, Classroom> {
     @NonNull
     @Override
     public Single<LoadResult<Integer, Classroom>> loadSingle(@NonNull LoadParams<Integer> params) {
-        return Single.<LoadResult<Integer, Classroom>>fromCallable(() -> {
+        android.util.Log.d("ClassroomPagingSource", "Bắt đầu load trang mới");
+        
+        return Single.create(emitter -> {
             int page = params.getKey() != null ? params.getKey() : 1;
-            QuerySnapshot querySnapshot = com.google.android.gms.tasks.Tasks.await(query.limit(PAGE_SIZE).get());
-            List<Classroom> classrooms = new ArrayList<>();
-            for (QueryDocumentSnapshot doc : querySnapshot) {
-                Classroom classroom = doc.toObject(Classroom.class);
-                classroom.setId(doc.getId());
-                classrooms.add(classroom);
-            }
-            Integer nextKey = classrooms.size() < PAGE_SIZE ? null : page + 1;
-            Integer prevKey = page > 1 ? page - 1 : null;
-            return (LoadResult<Integer, Classroom>) new LoadResult.Page<>(classrooms, prevKey, nextKey);
-        }).onErrorReturn(e -> new LoadResult.Error<Integer, Classroom>(e));
+            
+            // Thực hiện query Firestore bất đồng bộ
+            query.limit(PAGE_SIZE).get()
+                .addOnSuccessListener(querySnapshot -> {
+                    try {
+                        List<Classroom> classrooms = new ArrayList<>();
+                        if (querySnapshot.isEmpty()) {
+                            android.util.Log.w("ClassroomPagingSource", "QuerySnapshot trả về rỗng!");
+                        }
+                        
+                        for (QueryDocumentSnapshot doc : querySnapshot) {
+                            Classroom classroom = doc.toObject(Classroom.class);
+                            classroom.setId(doc.getId());
+                            android.util.Log.d("ClassroomPagingSource", "Classroom: " + classroom.getId() + " - " + classroom.getName());
+                            classrooms.add(classroom);
+                        }
+                        
+                        android.util.Log.d("ClassroomPagingSource", "Số lượng classroom lấy được: " + classrooms.size());
+                        Integer nextKey = classrooms.size() < PAGE_SIZE ? null : page + 1;
+                        Integer prevKey = page > 1 ? page - 1 : null;
+                        
+                        emitter.onSuccess(new LoadResult.Page<>(
+                            classrooms,
+                            prevKey,
+                            nextKey
+                        ));
+                    } catch (Exception e) {
+                        android.util.Log.e("ClassroomPagingSource", "Lỗi khi xử lý dữ liệu: " + e.getMessage(), e);
+                        emitter.onError(e);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("ClassroomPagingSource", "Lỗi khi truy vấn Firestore: " + e.getMessage(), e);
+                    emitter.onError(e);
+                });
+        });
     }
 }

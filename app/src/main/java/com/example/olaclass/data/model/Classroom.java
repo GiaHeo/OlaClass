@@ -6,6 +6,7 @@ public class Classroom {
     private String description;
     private String teacherId;
     private String subject;
+    private String inviteCode;
 
     public Classroom() {}
 
@@ -27,4 +28,18 @@ public class Classroom {
     public void setTeacherId(String teacherId) { this.teacherId = teacherId; }
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
+    public String getInviteCode() { return inviteCode; }
+    public void setInviteCode(String inviteCode) { this.inviteCode = inviteCode; }
+
+    @Override
+    public String toString() {
+        return "Classroom{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", teacherId='" + teacherId + '\'' +
+                ", subject='" + subject + '\'' +
+                ", inviteCode='" + inviteCode + '\'' +
+                '}';
+    }
 }

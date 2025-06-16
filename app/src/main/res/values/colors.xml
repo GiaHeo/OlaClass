@@ -19,6 +19,13 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorOnBackground">#000000</color>
     
+    <!-- Additional colors for FAB and UI elements -->
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC6</color>
+    <color name="teal_700">#018786</color>
+    <color name="black_overlay">#66000000</color>
+    
     <!-- Surface colors -->
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorOnSurface">#000000</color>
@@ -36,4 +43,5 @@
     <color name="divider">#1F000000</color>
     <color name="ripple">#1F000000</color>
     <color name="bottom_nav_icon">#757575</color>
+    <color name="red">#F44336</color>
 </resources>

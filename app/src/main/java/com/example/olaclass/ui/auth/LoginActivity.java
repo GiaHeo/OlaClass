@@ -291,52 +291,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkUserRoleAndRedirect(String userId) {
-        String methodTag = "checkUserRoleAndRedirect";
-        Log.d(TAG, methodTag + ": Checking role for user: " + userId);
-        
-        try {
             db.collection("users").document(userId).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
-                        // Document exists, check role
-                        String role = task.getResult().getString("role");
-                        if (role != null && !role.isEmpty()) {
-                            Log.d(TAG, methodTag + ": Found role " + role + " for user " + userId);
+            .addOnSuccessListener(documentSnapshot -> {
+                String role = "student"; // Default role
+                if (documentSnapshot.exists() && documentSnapshot.contains("role")) {
+                    role = documentSnapshot.getString("role");
+                }
                             goToMain(role);
-                            return;
-                        }
-                    }
-                    
-                    // If we get here, either:
-                    // 1. Document doesn't exist
-                    // 2. Role is not set
-                    // 3. There was an error
-                    Log.w(TAG, methodTag + ": No valid role found for user " + userId + ", showing role selection");
-                    showRoleSelectionDialog(mAuth.getCurrentUser());
-                });
-        } catch (Exception e) {
-            Log.e(TAG, methodTag + ": Error in checkUserRoleAndRedirect: " + e.getMessage());
-            // If there's any error, force sign out to clear any invalid state
-            mAuth.signOut();
-            mGoogleSignInClient.signOut().addOnCompleteListener(task -> {
-                // After sign out, show login screen
-                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                intent.putExtra("LOGOUT", true);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+            })
+            .addOnFailureListener(e -> {
+                Log.e(TAG, "Lỗi khi kiểm tra vai trò người dùng: " + e.getMessage());
+                // Mặc định là student nếu không lấy được vai trò
+                goToMain("student");
             });
-        }
     }
 
     private void goToMain(String role) {
         Intent intent;
         if ("teacher".equals(role)) {
-            intent = new Intent(this, MainActivityTeacher.class);
+            intent = new Intent(LoginActivity.this, MainActivityTeacher.class);
+            Log.d(TAG, "Chuyển hướng đến MainActivityTeacher");
         } else {
-            intent = new Intent(this, MainActivityStudent.class);
+            intent = new Intent(LoginActivity.this, MainActivityStudent.class);
+            Log.d(TAG, "Chuyển hướng đến MainActivityStudent");
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }

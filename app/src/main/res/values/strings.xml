@@ -43,4 +43,9 @@
     
     <!-- API Keys -->
     <string name="default_web_client_id" translatable="false">YOUR_WEB_CLIENT_ID.apps.googleusercontent.com</string>
+    
+    <!-- Classroom Actions -->
+    <string name="action_menu">Menu hành động</string>
+    <string name="copy_invite_code">Sao chép mã mời</string>
+    <string name="create_announcement">Tạo thông báo mới</string>
 </resources>

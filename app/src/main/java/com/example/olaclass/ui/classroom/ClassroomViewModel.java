@@ -12,13 +12,28 @@ import com.example.olaclass.data.repository.ClassroomRepository;
 import androidx.lifecycle.MutableLiveData;
 
 public class ClassroomViewModel extends ViewModel {
-    private final ClassroomRepository repository = new ClassroomRepository();
+    private final ClassroomRepository repository;
     private final MutableLiveData<PagingData<Classroom>> classroomPagingData = new MutableLiveData<>();
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private final String userRole;
 
-    public ClassroomViewModel() {
+    public ClassroomViewModel(ClassroomRepository repository, String userRole) {
+        this.repository = repository;
+        this.userRole = userRole;
+        loadClassrooms();
+    }
+
+    private void loadClassrooms() {
+        // Clear previous disposables if any to prevent memory leaks and duplicate subscriptions
+        disposables.clear(); 
         // Get the Flowable from repository
-        Flowable<PagingData<Classroom>> flowable = repository.getClassroomsPaged();
+        Flowable<PagingData<Classroom>> flowable;
+
+        if ("teacher".equals(userRole)) {
+            flowable = repository.getClassroomsPaged();
+        } else { // Assume student if not teacher, or add specific "student" check
+            flowable = repository.getJoinedClassroomsPaged();
+        }
         
         // Subscribe to the Flowable and update LiveData
         disposables.add(
@@ -36,6 +51,11 @@ public class ClassroomViewModel extends ViewModel {
 
     public LiveData<PagingData<Classroom>> getClassrooms() {
         return classroomPagingData;
+    }
+
+    // Method to trigger a refresh of classrooms
+    public void refreshClassrooms() {
+        loadClassrooms(); // Re-trigger the data loading
     }
 
     @Override

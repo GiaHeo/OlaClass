@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <!-- Loại bỏ mục Sao chép mã mời -->
+    <!--
+    <item
+        android:id="@+id/action_copy_invite"
+        android:title="Sao chép mã mời"
+        android:icon="@drawable/ic_content_copy"
+        app:showAsAction="ifRoom" />
+    -->
+        
+    <item
+        android:id="@+id/action_create_announcement"
+        android:title="@string/create_announcement"
+        android:icon="@drawable/ic_announcement"
+        app:showAsAction="ifRoom" />
+        
+    <item
+        android:id="@+id/action_delete_classroom"
+        android:title="Xóa lớp học"
+        android:titleTextColor="@color/red"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="never" />
+</menu>

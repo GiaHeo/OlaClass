@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import com.example.olaclass.R;
 import com.example.olaclass.ui.MainActivity;
 import com.example.olaclass.ui.assignments.AssignmentsFragment;
-import com.example.olaclass.ui.classroom.ClassroomListFragment;
+import com.example.olaclass.ui.classroom.ClassroomListFragmentStudent;
 import com.example.olaclass.ui.profile.ProfileFragment;
 import com.example.olaclass.utils.AuthUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,7 +32,7 @@ public class MainActivityStudent extends MainActivity {
             int itemId = item.getItemId();
             
             if (itemId == R.id.nav_my_classes) {
-                selectedFragment = new ClassroomListFragment();
+                selectedFragment = ClassroomListFragmentStudent.newInstance("student");
             } else if (itemId == R.id.nav_assignments) {
                 selectedFragment = new AssignmentsFragment();
             } else if (itemId == R.id.nav_profile) {
@@ -77,7 +77,7 @@ public class MainActivityStudent extends MainActivity {
     @Override
     protected void loadInitialFragment() {
         getSupportFragmentManager().beginTransaction()
-            .replace(R.id.fragment_container, new ClassroomListFragment())
+            .replace(R.id.fragment_container, ClassroomListFragmentStudent.newInstance("student"))
             .commit();
     }
 }
