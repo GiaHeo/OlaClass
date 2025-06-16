@@ -4,8 +4,9 @@ import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.PagingSource;
-import androidx.paging.rxjava2.RxPagingSource;
-import io.reactivex.Flowable;
+import androidx.paging.rxjava3.PagingRx;
+import androidx.paging.rxjava3.RxPagingSource;
+import io.reactivex.rxjava3.core.Flowable;
 import com.example.olaclass.data.model.Classroom;
 import com.example.olaclass.data.paging.ClassroomPagingSource;
 
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.HashMap;
 import java.util.Map;
 import androidx.annotation.NonNull;
@@ -26,7 +28,9 @@ public class ClassroomRepository {
         Map<String, Object> data = new HashMap<>();
         data.put("name", classroom.getName());
         data.put("description", classroom.getDescription());
+        data.put("subject", classroom.getSubject());
         data.put("teacherId", classroom.getTeacherId());
+        data.put("createdAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
         return classroomRef.add(data);
     }
 
@@ -141,12 +145,22 @@ public class ClassroomRepository {
         return classroomRef.document(classId).collection("assignments").add(assignmentData);
     }
 
-    // Hàm paging mock giữ lại cho demo
+    // Hàm paging với Paging 3
     public Flowable<PagingData<Classroom>> getClassroomsPaged() {
-        return new Pager<>(
-                new PagingConfig(10),
-                () -> new ClassroomPagingSource()
-        ).flowable();
+        com.google.firebase.firestore.Query baseQuery = FirebaseFirestore.getInstance()
+            .collection("classrooms")
+            .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING);
+            
+        PagingConfig pagingConfig = new PagingConfig(
+            /* pageSize = */ 10,
+            /* prefetchDistance = */ 20,
+            /* enablePlaceholders = */ false
+        );
+        
+        return PagingRx.getFlowable(new Pager<>(
+            pagingConfig,
+            () -> new ClassroomPagingSource(baseQuery)
+        ));
     }
 }
 

@@ -5,14 +5,16 @@ public class Classroom {
     private String name;
     private String description;
     private String teacherId;
+    private String subject;
 
     public Classroom() {}
 
-    public Classroom(String id, String name, String description, String teacherId) {
+    public Classroom(String id, String name, String description, String teacherId, String subject) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.teacherId = teacherId;
+        this.subject = subject;
     }
 
     public String getId() { return id; }
@@ -23,4 +25,6 @@ public class Classroom {
     public void setDescription(String description) { this.description = description; }
     public String getTeacherId() { return teacherId; }
     public void setTeacherId(String teacherId) { this.teacherId = teacherId; }
+    public String getSubject() { return subject; }
+    public void setSubject(String subject) { this.subject = subject; }
 }

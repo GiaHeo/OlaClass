@@ -28,10 +28,13 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
+    private ImageView imgAvatar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_update);
+        
         EditText etFullName = findViewById(R.id.et_full_name);
         EditText etEmail = findViewById(R.id.et_email);
         EditText etPhone = findViewById(R.id.et_phone);
@@ -39,10 +42,12 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         RadioButton rbMale = findViewById(R.id.rb_male);
         RadioButton rbFemale = findViewById(R.id.rb_female);
         Button btnUpdate = findViewById(R.id.btn_update_profile);
-        ImageView imgAvatar = findViewById(R.id.img_avatar);
+        imgAvatar = findViewById(R.id.iv_avatar);
         Button btnChooseAvatar = findViewById(R.id.btn_choose_avatar);
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        
         if (user != null) {
             DocumentReference docRef = db.collection("users").document(user.getUid());
             docRef.get().addOnSuccessListener(snapshot -> {

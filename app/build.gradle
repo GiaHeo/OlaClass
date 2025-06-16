@@ -44,7 +44,8 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
-    
+    implementation libs.paging.common.android
+
     // Testing
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
@@ -67,9 +68,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.7.7'
     implementation 'androidx.navigation:navigation-ui:2.7.7'
     
-    // RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // RxJava 3
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     
     // Image Loading
     implementation 'com.github.bumptech.glide:glide:4.16.0'
@@ -77,6 +78,22 @@ dependencies {
     
     // Data Binding
     implementation 'androidx.databinding:databinding-runtime:8.4.0'
+
+    // Paging 3 + RxJava3
+    implementation 'androidx.paging:paging-runtime:3.2.1'
+    implementation 'androidx.paging:paging-rxjava3:3.2.1'
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    // AndroidX Security Crypto
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+
+    // Google Sign-In
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
     
     // Circle ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'

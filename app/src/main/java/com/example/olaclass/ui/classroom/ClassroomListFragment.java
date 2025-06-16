@@ -12,8 +12,8 @@ import androidx.paging.PagingData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.olaclass.R;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class ClassroomListFragment extends Fragment {
     private ClassroomViewModel viewModel;

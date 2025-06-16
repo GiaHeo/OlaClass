@@ -30,9 +30,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         
-        <!-- Main Activity -->
+        <!-- Google Sign-In Configuration -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+            
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.GoogleSignInOptions"
+            android:value="@xml/google_sign_in_config" />
+        
+        <!-- Login Activity (Launcher) -->
         <activity
-            android:name=".ui.auth.AuthActivity"
+            android:name=".ui.auth.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -41,14 +50,40 @@
             </intent-filter>
         </activity>
         
-        <!-- Home Activities -->
+        <!-- Register Activity -->
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+            
+        <!-- Deprecated Auth Activity -->
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            tools:node="remove" />
+        
+        <!-- Main Activities -->
+        <activity
+            android:name=".ui.teacher.MainActivityTeacher"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+            
+        <activity
+            android:name=".ui.student.MainActivityStudent"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+            
+        <!-- Old Activities (Deprecated) -->
         <activity
             android:name=".ui.teacher.TeacherHomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:node="remove" />
             
         <activity
             android:name=".ui.student.StudentHomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:node="remove" />
             
         <!-- Firebase Cloud Messaging Service -->
         <service
@@ -62,13 +97,8 @@
         <!-- Language Switcher Activity -->
         <activity android:name=".ui.shared.LanguageActivity" />
         
-        <activity android:name=".ui.auth.AuthActivity" />
-        <activity android:name=".ui.classroom.ClassroomListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ui.classroom.ClassroomListActivity"
+            android:exported="false" />
         
     </application>
 

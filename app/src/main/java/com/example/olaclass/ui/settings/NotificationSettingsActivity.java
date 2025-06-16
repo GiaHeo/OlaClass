@@ -29,11 +29,16 @@ public class NotificationSettingsActivity extends AppCompatActivity {
     }
     private void onSwitchChanged(CompoundButton button, boolean isChecked) {
         SharedPreferences.Editor editor = prefs.edit();
-        switch (button.getId()) {
-            case R.id.swAssignment: editor.putBoolean(PreferenceKeys.ASSIGNMENT, isChecked); break;
-            case R.id.swAttendance: editor.putBoolean(PreferenceKeys.ATTENDANCE, isChecked); break;
-            case R.id.swGeneral: editor.putBoolean(PreferenceKeys.GENERAL, isChecked); break;
+        int id = button.getId();
+        
+        if (id == R.id.swAssignment) {
+            editor.putBoolean(PreferenceKeys.ASSIGNMENT, isChecked);
+        } else if (id == R.id.swAttendance) {
+            editor.putBoolean(PreferenceKeys.ATTENDANCE, isChecked);
+        } else if (id == R.id.swGeneral) {
+            editor.putBoolean(PreferenceKeys.GENERAL, isChecked);
         }
+        
         editor.apply();
     }
 }

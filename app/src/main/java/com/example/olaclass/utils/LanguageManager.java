@@ -8,6 +8,8 @@ import android.os.Build;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys; // Thêm thư viện mã hóa
 // import android.preference.PreferenceManager; (loại bỏ dòng này)
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Locale;
 
 public class LanguageManager {
@@ -39,5 +41,21 @@ public class LanguageManager {
             config.locale = locale;
         }
         resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+    
+    private static SharedPreferences getEncryptedPrefs(Context context) {
+        try {
+            String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            return EncryptedSharedPreferences.create(
+                "secret_shared_prefs",
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException | IOException e) {
+            // Fallback to regular SharedPreferences if encryption fails
+            return context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        }
     }
 }

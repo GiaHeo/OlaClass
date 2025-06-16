@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 
 public class UserRepository implements BaseRepository {
     private final FirebaseAuth firebaseAuth;

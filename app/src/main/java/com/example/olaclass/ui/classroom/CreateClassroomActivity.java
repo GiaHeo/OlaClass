@@ -8,8 +8,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.olaclass.R;
+import com.example.olaclass.data.model.Classroom;
 import com.example.olaclass.data.repository.ClassroomRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateClassroomActivity extends AppCompatActivity {
     private EditText etClassName, etClassDesc, etClassSubject;
@@ -36,8 +43,18 @@ public class CreateClassroomActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng nhập đủ tên lớp và môn học", Toast.LENGTH_SHORT).show();
             return;
         }
+        
         String teacherId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        repository.createClassroom(name, desc, subject, teacherId)
+        
+        // Create a new Classroom object
+        Classroom classroom = new Classroom();
+        classroom.setName(name);
+        classroom.setDescription(desc);
+        classroom.setSubject(subject);
+        classroom.setTeacherId(teacherId);
+        
+        // Add the classroom to Firestore
+        repository.addClassroom(classroom)
             .addOnSuccessListener(docRef -> {
                 repository.generateAndSaveUniqueInviteCode(docRef.getId())
                     .addOnSuccessListener(code -> {
