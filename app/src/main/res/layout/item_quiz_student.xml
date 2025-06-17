@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_quiz_title_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:text="Tên bài kiểm tra"/>
+
+        <TextView
+            android:id="@+id/tv_quiz_creator_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:text="Người tạo: "/>
+
+        <TextView
+            android:id="@+id/tv_quiz_start_time_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:text="Thời gian bắt đầu: "/>
+
+        <TextView
+            android:id="@+id/tv_quiz_end_time_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:text="Thời gian kết thúc: "/>
+
+        <TextView
+            android:id="@+id/tv_quiz_remaining_time_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"
+            android:text="Thời gian còn lại: "/>
+
+        <TextView
+            android:id="@+id/tv_quiz_duration_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:text="Thời lượng làm bài: "/>
+
+        <TextView
+            android:id="@+id/tv_quiz_status_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/holo_green_dark"
+            android:textStyle="italic"
+            android:text="Trạng thái: "/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView> 

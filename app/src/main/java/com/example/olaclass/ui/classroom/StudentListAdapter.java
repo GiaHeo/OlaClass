@@ -20,7 +20,7 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     private OnStudentClickListener listener; // For future click actions
 
     public interface OnStudentClickListener {
-        void onStudentClick(Student student);
+        void onStudentClick(Student student, View view);
     }
 
     public StudentListAdapter(OnStudentClickListener listener) {
@@ -60,7 +60,7 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onStudentClick(studentList.get(position));
+                    listener.onStudentClick(studentList.get(position), v);
                 }
             });
         }

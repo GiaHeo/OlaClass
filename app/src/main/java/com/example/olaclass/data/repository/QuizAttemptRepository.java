@@ -29,4 +29,10 @@ public class QuizAttemptRepository {
                 .whereEqualTo("quizId", quizId)
                 .get();
     }
+
+    public Task<QuerySnapshot> getQuizAttemptsForStudentAndClassroom(String studentId, String classroomId) {
+        return quizAttemptsRef.whereEqualTo("studentId", studentId)
+                .whereEqualTo("classroomId", classroomId)
+                .get();
+    }
 } 

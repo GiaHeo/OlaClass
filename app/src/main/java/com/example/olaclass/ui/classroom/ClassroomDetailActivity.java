@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FieldValue;
 import androidx.core.content.ContextCompat;
+import com.example.olaclass.ui.classroom.AssignmentsTeacherClassroomFragment;
+import com.example.olaclass.ui.classroom.AssignmentsStudentClassroomFragment;
 
 public class ClassroomDetailActivity extends AppCompatActivity {
     private String classroomId;
@@ -41,6 +43,10 @@ public class ClassroomDetailActivity extends AppCompatActivity {
     
     public String getClassroomId() {
         return classroomId;
+    }
+    
+    public String getCurrentUserRole() {
+        return currentUserRole;
     }
     
     @Override
@@ -88,6 +94,7 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         currentUserRole = documentSnapshot.getString("role");
                         Log.d(TAG, "Vai trò người dùng đã tải: " + currentUserRole);
+                        Log.d(TAG, "ClassroomDetailActivity: currentUserRole after fetch: " + currentUserRole);
 
                         // Set up ViewPager adapter after role is fetched
                         viewPager.setAdapter(new ClassroomPagerAdapter(this, classroomId, currentUserRole));
@@ -97,10 +104,10 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                                     tab.setText("Thông tin lớp");
                                     break;
                                 case 1:
-                                    tab.setText("Học sinh");
+                                    tab.setText("Danh sách lớp");
                                     break;
                                 case 2:
-                                    tab.setText("Bài tập & Lời mời");
+                                    tab.setText("Bài tập trên lớp");
                                     break;
                             }
                         }).attach();
@@ -323,22 +330,30 @@ public class ClassroomDetailActivity extends AppCompatActivity {
         }
         @Override
         public Fragment createFragment(int position) {
+            Log.d(TAG, "ClassroomPagerAdapter: creating fragment for position " + position + " with role: " + currentUserRole);
             Bundle args = new Bundle();
             args.putString("classroomId", classroomId);
+
             switch (position) {
                 case 0:
                     ClassroomInfoFragment infoFragment = new ClassroomInfoFragment();
                     infoFragment.setArguments(args);
                     return infoFragment;
                 case 1:
-                    StudentListFragment studentFragment = StudentListFragment.newInstance(classroomId, currentUserRole);
-                    studentFragment.setArguments(args);
-                    return studentFragment;
+                    return StudentListFragment.newInstance(classroomId);
                 case 2:
+                    // Dynamic fragment loading based on role
+                    if ("teacher".equals(currentUserRole)) {
+                        AssignmentsTeacherClassroomFragment teacherAssignmentsFragment = new AssignmentsTeacherClassroomFragment();
+                        teacherAssignmentsFragment.setArguments(args);
+                        return teacherAssignmentsFragment;
+                    } else if ("student".equals(currentUserRole)) {
+                        return AssignmentsStudentClassroomFragment.newInstance(classroomId);
+                    } else {
+                        return null;
+                    }
                 default:
-                    AssignmentInviteFragment assignFragment = new AssignmentInviteFragment();
-                    assignFragment.setArguments(args);
-                    return assignFragment;
+                    return null;
             }
         }
     }

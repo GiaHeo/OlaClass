@@ -32,14 +32,12 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
     private StudentListAdapter adapter;
     private StudentListViewModel viewModel;
     private String classroomId;
-    private String currentUserRole;
     private ClassroomRepository classroomRepository;
 
-    public static StudentListFragment newInstance(String classroomId, String currentUserRole) {
+    public static StudentListFragment newInstance(String classroomId) {
         StudentListFragment fragment = new StudentListFragment();
         Bundle args = new Bundle();
         args.putString("classroomId", classroomId);
-        args.putString("currentUserRole", currentUserRole);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,8 +47,7 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomId = getArguments().getString("classroomId");
-            currentUserRole = getArguments().getString("currentUserRole");
-            Log.d("StudentListFragment", "Classroom ID and currentUserRole received in onCreate: " + classroomId + ", " + currentUserRole);
+            Log.d("StudentListFragment", "Classroom ID received in onCreate: " + classroomId);
         } else {
             Log.d("StudentListFragment", "Arguments are null in onCreate.");
         }
@@ -90,10 +87,15 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
     }
 
     @Override
-    public void onStudentClick(Student student) {
+    public void onStudentClick(Student student, View view) {
+        String roleFromActivity = null;
+        if (getActivity() instanceof ClassroomDetailActivity) {
+            roleFromActivity = ((ClassroomDetailActivity) getActivity()).getCurrentUserRole();
+        }
+        Log.d("StudentListFragment", "onStudentClick: current user role from activity is " + roleFromActivity);
         // Only show delete option if the current user is a teacher
-        if ("teacher".equals(currentUserRole)) {
-            PopupMenu popup = new PopupMenu(requireContext(), recyclerView);
+        if ("teacher".equals(roleFromActivity)) {
+            PopupMenu popup = new PopupMenu(requireContext(), view);
             popup.getMenu().add(0, 0, 0, "Xóa học sinh").setIcon(R.drawable.ic_delete);
 
             popup.setOnMenuItemClickListener(item -> {

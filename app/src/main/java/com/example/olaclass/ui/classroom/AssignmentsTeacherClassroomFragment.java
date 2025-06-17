@@ -27,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignmentInviteFragment extends Fragment implements QuizAdapter.OnItemClickListener {
+public class AssignmentsTeacherClassroomFragment extends Fragment implements QuizAdapter.OnItemClickListener {
 
     private RecyclerView quizzesRecyclerView;
     private QuizAdapter quizAdapter;
@@ -42,7 +42,7 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_assignment_invite, container, false);
+        View view = inflater.inflate(R.layout.fragment_assignments_teacher_classroom, container, false);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
