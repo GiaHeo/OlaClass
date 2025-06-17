@@ -105,6 +105,12 @@
             android:exported="false"
             android:theme="@style/Theme.OlaClass" />
 
+        <!-- View Quiz Activity -->
+        <activity
+            android:name=".ui.assignments.ViewQuizActivity"
+            android:exported="false"
+            android:theme="@style/Theme.OlaClass" />
+
         <!-- Language Switcher Activity -->
         <activity android:name=".ui.shared.LanguageActivity" />
         

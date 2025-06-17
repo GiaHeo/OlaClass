@@ -128,7 +128,9 @@ public class QuizDetailActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         } else if (id == R.id.action_view_quiz) {
-            viewQuizDetails();
+            android.content.Intent intent = new android.content.Intent(this, com.example.olaclass.ui.assignments.ViewQuizActivity.class);
+            intent.putExtra("quizId", quizId);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_delete_quiz) {
             showDeleteConfirmation();
@@ -136,14 +138,6 @@ public class QuizDetailActivity extends AppCompatActivity {
         }
         
         return super.onOptionsItemSelected(item);
-    }
-    
-    private void viewQuizDetails() {
-        if (currentQuiz != null) {
-            // TODO: Implement view quiz details
-            Toast.makeText(this, "Xem đề kiểm tra: " + currentQuiz.getTitle(), 
-                Toast.LENGTH_SHORT).show();
-        }
     }
     
     private void showDeleteConfirmation() {
