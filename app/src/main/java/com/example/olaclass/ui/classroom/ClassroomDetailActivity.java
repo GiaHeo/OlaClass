@@ -27,6 +27,10 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class ClassroomDetailActivity extends AppCompatActivity {
     private String classroomId;
     
+    public String getClassroomId() {
+        return classroomId;
+    }
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

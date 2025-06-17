@@ -1,5 +1,6 @@
 package com.example.olaclass.ui.classroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
 import com.example.olaclass.data.repository.QuizRepository;
 import com.example.olaclass.ui.assignments.QuizAdapter;
+import com.example.olaclass.ui.assignments.QuizDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,18 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
 
     @Override
     public void onItemClick(Quiz quiz) {
-        // TODO: Handle quiz item click (e.g., open quiz details/attempt activity)
-        Toast.makeText(getContext(), "Clicked on quiz: " + quiz.getTitle(), Toast.LENGTH_SHORT).show();
+        // Get the classroom ID from the parent activity if available
+        String classroomId = null;
+        if (getActivity() != null && getActivity() instanceof ClassroomDetailActivity) {
+            classroomId = ((ClassroomDetailActivity) getActivity()).getClassroomId();
+        }
+        
+        // Start QuizDetailActivity with quiz and classroom info
+        Intent intent = new Intent(getContext(), QuizDetailActivity.class);
+        intent.putExtra("quizId", quiz.getId());
+        if (classroomId != null) {
+            intent.putExtra("classroomId", classroomId);
+        }
+        startActivity(intent);
     }
 }
