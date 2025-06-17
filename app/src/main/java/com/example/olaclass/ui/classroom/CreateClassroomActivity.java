@@ -111,8 +111,8 @@ public class CreateClassroomActivity extends AppCompatActivity {
                 .add(classData)
                 .addOnSuccessListener(documentReference -> {
                     Log.d("CreateClass", "Lớp học đã được tạo với ID: " + documentReference.getId());
-                    Toast.makeText(this, "Tạo lớp thành công! Mã tham gia: " + inviteCode, Toast.LENGTH_LONG).show();
-                    finish();
+                                Toast.makeText(this, "Tạo lớp thành công! Mã tham gia: " + inviteCode, Toast.LENGTH_LONG).show();
+                                finish();
                 })
                 .addOnFailureListener(e -> {
                     Log.e("CreateClass", "Lỗi khi tạo lớp: " + e.getMessage(), e);

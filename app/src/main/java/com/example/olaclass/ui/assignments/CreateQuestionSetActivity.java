@@ -5,6 +5,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,7 +18,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Question;
@@ -37,9 +42,7 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
 
     private EditText questionSetTitleEditText;
     private LinearLayout questionsContainer;
-    private Button addQuestionButton;
-    private Button cancelButton;
-    private Button saveQuestionSetButton;
+    private Toolbar toolbar;
 
     private QuestionRepository questionRepository;
     private QuestionSet currentQuestionSet;
@@ -54,11 +57,15 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_question_set);
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Tạo bộ câu hỏi");
+        }
+
         questionSetTitleEditText = findViewById(R.id.edit_text_question_set_title);
         questionsContainer = findViewById(R.id.questions_container);
-        addQuestionButton = findViewById(R.id.button_add_question);
-        cancelButton = findViewById(R.id.button_cancel);
-        saveQuestionSetButton = findViewById(R.id.button_save_question_set);
 
         questionRepository = new QuestionRepository();
 
@@ -75,10 +82,6 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
             saveQuestionSet(currentQuestionSet); // Initial save to get an ID
         }
 
-        addQuestionButton.setOnClickListener(v -> {
-            addQuestionLayout(null); // Add a new empty question
-        });
-
         // Listen for title changes to trigger auto-save
         questionSetTitleEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,30 +96,6 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
                     currentQuestionSet.setTitle(s.toString());
                     debounceSave();
                 }
-            }
-        });
-
-        cancelButton.setOnClickListener(v -> {
-            finish();
-        });
-
-        saveQuestionSetButton.setOnClickListener(v -> {
-            if (currentQuestionSet != null) {
-                String title = questionSetTitleEditText.getText().toString();
-                currentQuestionSet.setTitle(title);
-
-                questionRepository.saveQuestionSet(currentQuestionSet)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Question set saved successfully via Save button: " + currentQuestionSet.getId());
-                        Toast.makeText(this, "Đã lưu bộ câu hỏi", Toast.LENGTH_SHORT).show();
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e(TAG, "Error saving question set via Save button: " + e.getMessage(), e);
-                        Toast.makeText(this, "Lỗi lưu bộ câu hỏi: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
-            } else {
-                Toast.makeText(this, "Không thể lưu: Bộ câu hỏi chưa được khởi tạo.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -283,12 +262,20 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
         questionRepository.saveQuestionSet(questionSet)
             .addOnSuccessListener(aVoid -> {
                 Log.d(TAG, "Question set saved successfully: " + questionSet.getId());
-                Toast.makeText(this, "Đã lưu bộ câu hỏi", Toast.LENGTH_SHORT).show();
+                // No Toast or finish() here, as this is for auto-save/initial save
             })
             .addOnFailureListener(e -> {
                 Log.e(TAG, "Error saving question set: " + e.getMessage(), e);
-                Toast.makeText(this, "Lỗi lưu bộ câu hỏi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                // No Toast here, as this is for auto-save/initial save
             });
+    }
+
+    private QuestionSet createNewQuestionSetCopy(QuestionSet original, String newTitle) {
+        QuestionSet newSet = new QuestionSet();
+        newSet.setTitle(newTitle);
+        newSet.setQuestions(new ArrayList<>(original.getQuestions())); // Deep copy
+        newSet.setId(null); // Ensure a new ID is generated by Firestore
+        return newSet;
     }
 
     private void debounceSave() {
@@ -308,6 +295,95 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
         super.onDestroy();
         if (saveDisposable != null && !saveDisposable.isDisposed()) {
             saveDisposable.dispose();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_create_question_set, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId(); // Get the ID once
+
+        if (itemId == R.id.action_add_question) {
+            addQuestionLayout(null);
+            return true;
+        } else if (itemId == R.id.action_cancel) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_save) {
+            if (currentQuestionSet != null) {
+                String title = questionSetTitleEditText.getText().toString();
+                currentQuestionSet.setTitle(title);
+
+                final QuestionSet questionSetToSave = currentQuestionSet;
+
+                questionRepository.saveQuestionSet(questionSetToSave)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Question set saved successfully via Save button: " + currentQuestionSet.getId());
+                        Toast.makeText(this, "Đã lưu bộ câu hỏi", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error saving question set via Save button: " + e.getMessage(), e);
+                        Toast.makeText(this, "Lỗi lưu bộ câu hỏi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+            } else {
+                Toast.makeText(this, "Không thể lưu: Bộ câu hỏi chưa được khởi tạo.", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (itemId == R.id.action_save_as) {
+            if (currentQuestionSet != null) {
+                String title = questionSetTitleEditText.getText().toString();
+                currentQuestionSet.setTitle(title);
+
+                final QuestionSet questionSetToSave = createNewQuestionSetCopy(currentQuestionSet, title);
+
+                questionRepository.saveQuestionSet(questionSetToSave)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Question set saved as new successfully: " + questionSetToSave.getId());
+                        Toast.makeText(this, "Đã lưu bộ câu hỏi thành bộ mới", Toast.LENGTH_SHORT).show();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error saving question set as new: " + e.getMessage(), e);
+                        Toast.makeText(this, "Lỗi lưu bộ câu hỏi thành bộ mới: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+            } else {
+                Toast.makeText(this, "Không thể lưu thành: Bộ câu hỏi chưa được khởi tạo.", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (itemId == R.id.action_delete_question_set) {
+            if (currentQuestionSet != null && currentQuestionSet.getId() != null) {
+                new AlertDialog.Builder(this)
+                    .setTitle("Xóa bộ câu hỏi")
+                    .setMessage("Bạn có chắc chắn muốn xóa bộ câu hỏi này không?")
+                    .setPositiveButton("Xóa", (dialog, which) -> {
+                        questionRepository.deleteQuestionSet(currentQuestionSet.getId())
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(this, "Đã xóa bộ câu hỏi", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(this, "Lỗi xóa bộ câu hỏi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e(TAG, "Error deleting question set: " + e.getMessage(), e);
+                            });
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+            } else {
+                Toast.makeText(this, "Không thể xóa: Bộ câu hỏi chưa được lưu.", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 } 

@@ -52,6 +52,27 @@ public class QuestionRepository {
         });
     }
 
+    // Phương thức để lấy tất cả QuestionSets
+    public Task<List<QuestionSet>> getAllQuestionSets() {
+        return questionSetsRef.get()
+            .continueWith(task -> {
+                List<QuestionSet> questionSetList = new ArrayList<>();
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        QuestionSet questionSet = document.toObject(QuestionSet.class);
+                        questionSet.setId(document.getId());
+                        questionSetList.add(questionSet);
+                    }
+                }
+                return questionSetList;
+            });
+    }
+
+    // Phương thức để xóa một QuestionSet theo ID
+    public Task<Void> deleteQuestionSet(String questionSetId) {
+        return questionSetsRef.document(questionSetId).delete();
+    }
+
     // The following methods related to 'questions' collection are likely deprecated
     // and are being removed or commented out as questions are now part of QuestionSet.
     /*

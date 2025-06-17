@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/tv_my_question_sets_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Danh sách bài tập (Giáo viên)"
-        android:textSize="18sp"
-        android:layout_gravity="center" />
+        android:text="Bộ câu hỏi của tôi"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_question_sets"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_my_question_sets_title" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_assignment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:contentDescription="Thêm bài tập mới"
         app:srcCompat="@drawable/ic_add"
         app:tint="@android:color/white"/>
 
-</FrameLayout>
+</RelativeLayout>
