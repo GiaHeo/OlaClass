@@ -8,16 +8,18 @@ public class AutoGrader {
         int score = 0;
         for (int i = 0; i < questions.size(); i++) {
             Question q = questions.get(i);
-            if (q.getType().equals("multiple_choice") && q.getAnswer() != null) {
-                if (q.getAnswer().equalsIgnoreCase(userAnswers.get(i))) {
-                    score++;
-                }
-            } else if (q.getType().equals("fill_blank") && q.getCorrectAnswers() != null) {
-                if (q.getCorrectAnswers().contains(userAnswers.get(i))) {
-                    score++;
+            String userAnswer = userAnswers.get(i); // Get the user's answer for the current question
+
+            if (q.getType().equals("multiple_choice") || q.getType().equals("fill_blank")) {
+                // For multiple choice and fill_blank, check if the user's answer matches any correct option
+                for (Question.Option option : q.getOptions()) {
+                    if (option.isCorrect() && option.getContent().equalsIgnoreCase(userAnswer)) {
+                        score++;
+                        break; // Found a correct answer, move to the next question
+                    }
                 }
             }
-            // Essay/tự luận không tự động chấm điểm
+            // Essay/tự luận không tự động chấm điểm, nên không cần xử lý ở đây
         }
         return score;
     }

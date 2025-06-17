@@ -113,6 +113,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         
+        <activity
+            android:name=".ui.assignments.CreateQuestionSetActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -1,24 +1,23 @@
 package com.example.olaclass.data.model;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class Question {
     private String id;
     private String type; // "multiple_choice", "essay", "fill_blank"
     private String content;
-    private List<String> options; // for multiple_choice
-    private String answer; // correct answer (for auto grading)
-    private List<String> correctAnswers; // for multi-answer or fill_blank
+    private List<Option> options; // for multiple_choice
 
-    public Question() {}
+    public Question() {
+        this.options = new ArrayList<>();
+    }
 
-    public Question(String id, String type, String content, List<String> options, String answer, List<String> correctAnswers) {
+    public Question(String id, String type, String content, List<Option> options) {
         this.id = id;
         this.type = type;
         this.content = content;
         this.options = options;
-        this.answer = answer;
-        this.correctAnswers = correctAnswers;
     }
 
     public String getId() { return id; }
@@ -30,12 +29,24 @@ public class Question {
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    public List<String> getOptions() { return options; }
-    public void setOptions(List<String> options) { this.options = options; }
+    public List<Option> getOptions() { return options; }
+    public void setOptions(List<Option> options) { this.options = options; }
 
-    public String getAnswer() { return answer; }
-    public void setAnswer(String answer) { this.answer = answer; }
+    public static class Option {
+        private String content;
+        private boolean isCorrect;
 
-    public List<String> getCorrectAnswers() { return correctAnswers; }
-    public void setCorrectAnswers(List<String> correctAnswers) { this.correctAnswers = correctAnswers; }
+        public Option() {}
+
+        public Option(String content, boolean isCorrect) {
+            this.content = content;
+            this.isCorrect = isCorrect;
+        }
+
+        public String getContent() { return content; }
+        public void setContent(String content) { this.content = content; }
+
+        public boolean isCorrect() { return isCorrect; }
+        public void setCorrect(boolean correct) { isCorrect = correct; }
+    }
 }
