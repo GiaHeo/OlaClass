@@ -28,6 +28,8 @@ import com.example.olaclass.data.model.QuestionSet;
 import com.example.olaclass.data.repository.QuestionRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,7 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
     private QuestionSet currentQuestionSet;
     private String questionSetId; // ID của bộ câu hỏi hiện tại
     private Disposable saveDisposable; // For debouncing saves
+    private FirebaseAuth mAuth;
 
     private static final String TAG = "CreateQuestionSetActivity";
     private static final long SAVE_DEBOUNCE_TIME = 1000; // 1 second
@@ -68,6 +71,7 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
         questionsContainer = findViewById(R.id.questions_container);
 
         questionRepository = new QuestionRepository();
+        mAuth = FirebaseAuth.getInstance();
 
         // Get questionSetId from Intent, if editing an existing set
         questionSetId = getIntent().getStringExtra("questionSetId");
@@ -79,6 +83,13 @@ public class CreateQuestionSetActivity extends AppCompatActivity {
             currentQuestionSet = new QuestionSet();
             currentQuestionSet.setTitle("");
             currentQuestionSet.setQuestions(new ArrayList<>());
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser != null) {
+                currentQuestionSet.setCreatorId(currentUser.getUid());
+            } else {
+                Log.e(TAG, "Người dùng chưa đăng nhập, không thể đặt creatorId.");
+                // Handle case where user is not logged in, maybe redirect to login
+            }
             saveQuestionSet(currentQuestionSet); // Initial save to get an ID
         }
 

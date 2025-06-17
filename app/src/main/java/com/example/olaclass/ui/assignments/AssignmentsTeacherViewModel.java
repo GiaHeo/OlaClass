@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.olaclass.data.model.QuestionSet;
 import com.example.olaclass.data.repository.QuestionRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -18,13 +19,22 @@ public class AssignmentsTeacherViewModel extends ViewModel {
     private final MutableLiveData<String> _errorMessage = new MutableLiveData<>();
     public LiveData<String> errorMessage = _errorMessage;
 
+    private final FirebaseAuth mAuth;
+
     public AssignmentsTeacherViewModel() {
         questionRepository = new QuestionRepository();
+        mAuth = FirebaseAuth.getInstance();
         loadQuestionSets();
     }
 
     public void loadQuestionSets() {
-        questionRepository.getAllQuestionSets()
+        String currentUserId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+        if (currentUserId == null) {
+            _errorMessage.setValue("Không tìm thấy ID người dùng.");
+            return;
+        }
+
+        questionRepository.getQuestionSetsByCreator(currentUserId)
             .addOnSuccessListener(questionSetList -> {
                 _questionSets.setValue(questionSetList);
             })

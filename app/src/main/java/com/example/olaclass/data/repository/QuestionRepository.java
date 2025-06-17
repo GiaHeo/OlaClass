@@ -68,6 +68,22 @@ public class QuestionRepository {
             });
     }
 
+    // Phương thức để lấy QuestionSets theo creatorId
+    public Task<List<QuestionSet>> getQuestionSetsByCreator(String creatorId) {
+        return questionSetsRef.whereEqualTo("creatorId", creatorId).get()
+                .continueWith(task -> {
+                    List<QuestionSet> questionSetList = new ArrayList<>();
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            QuestionSet questionSet = document.toObject(QuestionSet.class);
+                            questionSet.setId(document.getId());
+                            questionSetList.add(questionSet);
+                        }
+                    }
+                    return questionSetList;
+                });
+    }
+
     // Phương thức để xóa một QuestionSet theo ID
     public Task<Void> deleteQuestionSet(String questionSetId) {
         return questionSetsRef.document(questionSetId).delete();
