@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="#544747"
         android:text="Tên học sinh" />
 
 </LinearLayout> 

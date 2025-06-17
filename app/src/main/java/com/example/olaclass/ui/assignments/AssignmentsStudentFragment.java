@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
+import com.example.olaclass.data.repository.ClassroomRepository;
 import com.example.olaclass.ui.assignments.QuizAdapter;
 import com.example.olaclass.ui.assignments.QuizAttemptActivity;
 import com.example.olaclass.ui.assignments.QuizDetailTeacherActivity;
 import com.example.olaclass.ui.classroom.ClassroomDetailActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -33,6 +35,9 @@ public class AssignmentsStudentFragment extends Fragment implements QuizAdapter.
     private QuizAdapter adapter;
     private RecyclerView recyclerView;
     private TextView noQuizzesTextView;
+    private ClassroomRepository classroomRepository;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Nullable
     @Override
@@ -43,7 +48,12 @@ public class AssignmentsStudentFragment extends Fragment implements QuizAdapter.
         noQuizzesTextView = view.findViewById(R.id.text_view_no_quizzes);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QuizAdapter();
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        classroomRepository = new ClassroomRepository(db, mAuth);
+
+        adapter = new QuizAdapter(classroomRepository);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -77,47 +87,11 @@ public class AssignmentsStudentFragment extends Fragment implements QuizAdapter.
 
     @Override
     public void onItemClick(Quiz quiz) {
-        long currentTime = System.currentTimeMillis();
-        long startTime = quiz.getStartTime();
-        long endTime = quiz.getEndTime();
-        
-        if (currentTime < startTime) {
-            // Quiz hasn't started yet
-            long minutesUntilStart = (startTime - currentTime) / (60 * 1000);
-            String message;
-            
-            if (minutesUntilStart < 60) {
-                // Less than 1 hour until start
-                message = String.format("Vui lòng đợi đến thời gian bắt đầu. Còn %d phút nữa.", minutesUntilStart);
-            } else {
-                // More than 1 hour until start
-                long hours = minutesUntilStart / 60;
-                long minutes = minutesUntilStart % 60;
-                message = String.format("Vui lòng đợi đến thời gian bắt đầu. Còn %d giờ %d phút nữa.", hours, minutes);
-            }
-            
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-        } else if (currentTime > endTime) {
-            // Quiz has already ended
-            Toast.makeText(getContext(), "Bài kiểm tra đã kết thúc.", Toast.LENGTH_LONG).show();
-        } else {
-            // Quiz is active
-            long timeLeft = endTime - currentTime;
-            long minutesLeft = timeLeft / (60 * 1000);
-            
-            if (minutesLeft < 5) {
-                // Less than 5 minutes left
-                Toast.makeText(getContext(), 
-                    String.format("Bài kiểm tra sẽ kết thúc sau %d phút nữa. Hãy nhanh tay hoàn thành!", minutesLeft), 
-                    Toast.LENGTH_LONG).show();
-            }
-            
-            // Start the quiz attempt
-            Intent intent = new Intent(getActivity(), QuizAttemptActivity.class);
-            intent.putExtra("quizId", quiz.getId());
-            intent.putExtra("classroomId", quiz.getClassroomId());
-            intent.putExtra("timeLeft", timeLeft);
-            startActivity(intent);
-        }
+        // Handle quiz click: Navigate to QuizAttemptActivity for students
+        Toast.makeText(getContext(), "Bắt đầu bài kiểm tra: " + quiz.getTitle(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), QuizAttemptActivity.class);
+        intent.putExtra("quizId", quiz.getId());
+        intent.putExtra("classroomId", quiz.getClassroomId()); // Pass classroomId if needed
+        startActivity(intent);
     }
 } 

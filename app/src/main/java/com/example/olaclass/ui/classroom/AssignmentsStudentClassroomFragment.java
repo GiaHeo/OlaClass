@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
+import com.example.olaclass.data.repository.ClassroomRepository;
 import com.example.olaclass.data.repository.QuizRepository;
 import com.example.olaclass.data.repository.QuizAttemptRepository;
 import com.example.olaclass.ui.assignments.StudentQuizAdapter;
@@ -34,6 +35,7 @@ public class AssignmentsStudentClassroomFragment extends Fragment implements Stu
     private StudentQuizAdapter quizAdapter;
     private QuizRepository quizRepository;
     private QuizAttemptRepository quizAttemptRepository;
+    private ClassroomRepository classroomRepository;
     private String classroomId;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -59,6 +61,7 @@ public class AssignmentsStudentClassroomFragment extends Fragment implements Stu
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         currentUserId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+        classroomRepository = new ClassroomRepository(db, mAuth);
 
         if (getArguments() != null) {
             classroomId = getArguments().getString("classroomId");
@@ -73,7 +76,7 @@ public class AssignmentsStudentClassroomFragment extends Fragment implements Stu
 
         quizzesRecyclerView = view.findViewById(R.id.recycler_view_quizzes_student);
         quizzesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        quizAdapter = new StudentQuizAdapter();
+        quizAdapter = new StudentQuizAdapter(classroomRepository);
         quizAdapter.setOnItemClickListener(this);
         quizzesRecyclerView.setAdapter(quizAdapter);
 

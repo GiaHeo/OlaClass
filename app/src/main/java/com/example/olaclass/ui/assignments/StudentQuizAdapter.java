@@ -9,7 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
+import com.example.olaclass.data.model.Classroom;
 import com.example.olaclass.data.model.Quiz;
+import com.example.olaclass.data.repository.ClassroomRepository;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,9 +26,14 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
 
     private List<Quiz> quizzes = new ArrayList<>();
     private OnItemClickListener listener;
+    private ClassroomRepository classroomRepository;
 
     public interface OnItemClickListener {
         void onItemClick(Quiz quiz);
+    }
+
+    public StudentQuizAdapter(ClassroomRepository classroomRepository) {
+        this.classroomRepository = classroomRepository;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -57,6 +66,7 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
     class QuizViewHolder extends RecyclerView.ViewHolder {
         TextView tvQuizTitle;
         TextView tvQuizCreator;
+        TextView tvClassroomName;
         TextView tvQuizStartTime;
         TextView tvQuizEndTime;
         TextView tvQuizRemainingTime;
@@ -67,6 +77,7 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
             super(itemView);
             tvQuizTitle = itemView.findViewById(R.id.tv_quiz_title_student);
             tvQuizCreator = itemView.findViewById(R.id.tv_quiz_creator_student);
+            tvClassroomName = itemView.findViewById(R.id.tv_classroom_name_student);
             tvQuizStartTime = itemView.findViewById(R.id.tv_quiz_start_time_student);
             tvQuizEndTime = itemView.findViewById(R.id.tv_quiz_end_time_student);
             tvQuizRemainingTime = itemView.findViewById(R.id.tv_quiz_remaining_time_student);
@@ -84,6 +95,28 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
         public void bind(Quiz quiz) {
             tvQuizTitle.setText(quiz.getTitle());
             tvQuizCreator.setText("Người tạo: " + quiz.getCreatorName());
+
+            if (quiz.getClassroomId() != null && !quiz.getClassroomId().isEmpty()) {
+                classroomRepository.getClassroomById(quiz.getClassroomId())
+                        .addOnSuccessListener(documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                String classroomName = documentSnapshot.getString("name");
+                                if (classroomName != null) {
+                                    tvClassroomName.setText("Tên lớp: " + classroomName);
+                                } else {
+                                    tvClassroomName.setText("Tên lớp: Không tìm thấy");
+                                }
+                            } else {
+                                tvClassroomName.setText("Tên lớp: Không tìm thấy");
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            tvClassroomName.setText("Tên lớp: Lỗi tải");
+                            System.err.println("Error loading classroom: " + e.getMessage());
+                        });
+            } else {
+                tvClassroomName.setText("Tên lớp: N/A");
+            }
 
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
@@ -109,7 +142,6 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
                 tvQuizRemainingTime.setText("Thời gian còn lại: " + remainingTimeText);
                 tvQuizRemainingTime.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
                 
-                // Determine status based on current time and start time
                 if (currentTime < quiz.getStartTime()) {
                     tvQuizStatus.setText("Trạng thái: Sắp diễn ra");
                     tvQuizStatus.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_blue_dark));
@@ -118,9 +150,7 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
                     tvQuizStatus.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_green_dark));
                 }
             }
-            // TODO: Update completion status after integrating QuizAttempt model fully
-            // For now, assume not done if not attempted (as per logic in fragment)
-            tvQuizStatus.append(" (Chưa làm)"); // This will be updated later with actual attempt status
+            tvQuizStatus.append(" (Chưa làm)");
         }
     }
 } 

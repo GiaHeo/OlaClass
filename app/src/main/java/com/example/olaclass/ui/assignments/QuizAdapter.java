@@ -9,7 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
+import com.example.olaclass.data.model.Classroom;
 import com.example.olaclass.data.model.Quiz;
+import com.example.olaclass.data.repository.ClassroomRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,9 +25,14 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
 
     private List<Quiz> quizzes = new ArrayList<>();
     private OnItemClickListener listener;
+    private ClassroomRepository classroomRepository;
 
     public interface OnItemClickListener {
         void onItemClick(Quiz quiz);
+    }
+
+    public QuizAdapter(ClassroomRepository classroomRepository) {
+        this.classroomRepository = classroomRepository;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -49,6 +58,29 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
         // Set basic quiz info
         holder.titleTextView.setText(currentQuiz.getTitle());
         holder.creatorTextView.setText("Người tạo: " + currentQuiz.getCreatorName());
+
+        // Fetch and set classroom name
+        if (currentQuiz.getClassroomId() != null && !currentQuiz.getClassroomId().isEmpty()) {
+            classroomRepository.getClassroomById(currentQuiz.getClassroomId())
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String classroomName = documentSnapshot.getString("name");
+                            if (classroomName != null) {
+                                holder.classroomNameTextView.setText("Tên lớp: " + classroomName);
+                            } else {
+                                holder.classroomNameTextView.setText("Tên lớp: Không tìm thấy");
+                            }
+                        } else {
+                            holder.classroomNameTextView.setText("Tên lớp: Không tìm thấy");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        holder.classroomNameTextView.setText("Tên lớp: Lỗi tải");
+                        System.err.println("Error loading classroom: " + e.getMessage());
+                    });
+        } else {
+            holder.classroomNameTextView.setText("Tên lớp: N/A");
+        }
 
         // Format and set time information
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
@@ -113,6 +145,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
     static class QuizViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView creatorTextView;
+        TextView classroomNameTextView;
         TextView startTimeTextView;
         TextView endTimeTextView;
         TextView remainingTimeTextView;
@@ -123,6 +156,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.QuizViewHolder
             super(itemView);
             titleTextView = itemView.findViewById(R.id.tv_quiz_title_student);
             creatorTextView = itemView.findViewById(R.id.tv_quiz_creator_student);
+            classroomNameTextView = itemView.findViewById(R.id.tv_classroom_name_student);
             startTimeTextView = itemView.findViewById(R.id.tv_quiz_start_time_student);
             endTimeTextView = itemView.findViewById(R.id.tv_quiz_end_time_student);
             remainingTimeTextView = itemView.findViewById(R.id.tv_quiz_remaining_time_student);

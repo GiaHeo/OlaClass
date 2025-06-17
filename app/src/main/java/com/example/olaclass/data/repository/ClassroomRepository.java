@@ -85,7 +85,7 @@ public class ClassroomRepository {
     }
 
     // Lấy lớp học theo ID
-    public Task<DocumentSnapshot> getClassroom(String classroomId) {
+    public Task<DocumentSnapshot> getClassroomById(String classroomId) {
         return classroomRef.document(classroomId).get();
     }
 

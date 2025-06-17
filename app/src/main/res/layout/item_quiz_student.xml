@@ -31,6 +31,14 @@
             android:text="Người tạo: "/>
 
         <TextView
+            android:id="@+id/tv_classroom_name_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:text="Tên lớp: "/>
+
+        <TextView
             android:id="@+id/tv_quiz_start_time_student"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +79,12 @@
             android:textColor="@android:color/holo_green_dark"
             android:textStyle="italic"
             android:text="Trạng thái: "/>
+
+        <TextView
+            android:id="@+id/poin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Điểm:" />
 
     </LinearLayout>
 
