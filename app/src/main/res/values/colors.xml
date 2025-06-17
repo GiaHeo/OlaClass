@@ -44,6 +44,8 @@
     <color name="ripple">#1F000000</color>
     <color name="bottom_nav_icon">#757575</color>
     <color name="red">#F44336</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="grey_700">#616161</color>
 
     <color name="md_theme_primary">#673AB7</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>

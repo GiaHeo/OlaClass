@@ -3,6 +3,7 @@ package com.example.olaclass.ui.classroom;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
+import com.example.olaclass.ui.assignments.CreateQuizActivity;
 import com.example.olaclass.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -86,6 +87,9 @@ public class ClassroomDetailActivity extends AppCompatActivity {
             if (id == R.id.action_create_announcement) {
                 createNewAnnouncement();
                 return true;
+            } else if (id == R.id.action_create_quiz) {
+                createNewQuiz();
+                return true;
             } else if (id == R.id.action_delete_classroom) {
                 // Đổi màu chữ menu thành đỏ
                 android.view.MenuItem deleteItem = item;
@@ -106,6 +110,16 @@ public class ClassroomDetailActivity extends AppCompatActivity {
         // TODO: Mở màn hình tạo thông báo mới
         Toast.makeText(this, "Mở màn hình tạo thông báo cho lớp " + classroomId, 
             Toast.LENGTH_SHORT).show();
+    }
+
+    private void createNewQuiz() {
+        // TODO: Mở màn hình tạo bài kiểm tra mới
+        // Toast.makeText(this, "Mở màn hình tạo bài kiểm tra cho lớp " + classroomId,
+        //     Toast.LENGTH_SHORT).show();
+        
+        Intent intent = new Intent(this, CreateQuizActivity.class);
+        intent.putExtra("classroomId", classroomId);
+        startActivity(intent);
     }
 
     private void showDeleteClassroomDialog() {

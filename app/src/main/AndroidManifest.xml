@@ -117,6 +117,9 @@
             android:name=".ui.assignments.CreateQuestionSetActivity"
             android:exported="false" />
 
+        <activity android:name=".ui.assignments.CreateQuizActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

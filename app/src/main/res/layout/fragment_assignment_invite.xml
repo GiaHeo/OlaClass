@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_assignment"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_quizzes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bài tập &amp; lời mời sẽ hiển thị ở đây"
-        android:textSize="16sp"/>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
     <!-- TODO: Thêm RecyclerView bài tập, mã mời, nút gửi lời mời -->
 

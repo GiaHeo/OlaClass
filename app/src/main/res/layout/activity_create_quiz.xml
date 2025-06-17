@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.assignments.CreateQuestionSetActivity">
+    tools:context=".ui.assignments.CreateQuizActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.OlaClass.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/blue_500"
             app:titleTextColor="@color/md_theme_onPrimary" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -31,24 +31,49 @@
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/edit_text_question_set_title"
+                android:id="@+id/edit_text_quiz_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên bộ câu hỏi"
+                android:hint="Tên bài kiểm tra"
                 android:inputType="textCapSentences"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp"/>
 
-            <LinearLayout
-                android:id="@+id/questions_container"
+            <Spinner
+                android:id="@+id/spinner_question_sets"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginBottom="16dp"
+                android:minHeight="48dp"/>
 
-                <!-- Questions will be added here dynamically -->
+            <Button
+                android:id="@+id/button_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chọn thời gian bắt đầu"
+                android:layout_marginBottom="8dp"/>
 
-            </LinearLayout>
+            <Button
+                android:id="@+id/button_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chọn thời gian kết thúc"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/edit_text_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Thời gian làm bài (phút)"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/button_create_quiz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tạo bài kiểm tra"/>
 
         </LinearLayout>
 

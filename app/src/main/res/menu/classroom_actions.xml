@@ -16,6 +16,12 @@
         android:title="@string/create_announcement"
         android:icon="@drawable/ic_announcement"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_create_quiz"
+        android:title="Tạo bài kiểm tra"
+        android:icon="@drawable/ic_assignment"
+        app:showAsAction="ifRoom" />
         
     <item
         android:id="@+id/action_delete_classroom"
