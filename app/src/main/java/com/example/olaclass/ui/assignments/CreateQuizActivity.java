@@ -75,13 +75,16 @@ public class CreateQuizActivity extends AppCompatActivity {
         questionRepository = new QuestionRepository();
         quizRepository = new QuizRepository();
 
+        // classroomId is optional - if not provided, the quiz won't be associated with a specific classroom
         classroomId = getIntent().getStringExtra("classroomId");
-        if (classroomId == null || classroomId.isEmpty()) {
-            Toast.makeText(this, "Lỗi: Không tìm thấy ID lớp học.", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
 
+        // Update UI to show if this is a classroom-specific quiz
+        if (classroomId == null || classroomId.isEmpty()) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Tạo bộ câu hỏi mới");
+            }
+        }
+        
         loadQuestionSets();
         setupDateTimePickers();
 

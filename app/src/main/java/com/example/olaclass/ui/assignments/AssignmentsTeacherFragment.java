@@ -16,15 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
+import com.example.olaclass.data.model.QuestionSet;
 import com.example.olaclass.data.model.Quiz;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class AssignmentsTeacherFragment extends Fragment implements TeacherQuizAdapter.OnItemClickListener {
+public class AssignmentsTeacherFragment extends Fragment implements QuestionSetAdapter.OnItemClickListener {
 
     private AssignmentsTeacherViewModel viewModel;
-    private TeacherQuizAdapter adapter;
+    private QuestionSetAdapter adapter;
     private RecyclerView recyclerView;
     private static final String TAG = "AssignmentsTeacherFragment";
 
@@ -33,17 +34,17 @@ public class AssignmentsTeacherFragment extends Fragment implements TeacherQuizA
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_assignments_teacher, container, false);
         
-        recyclerView = view.findViewById(R.id.recycler_view_question_sets); // Assuming this ID is for quizzes now
+        recyclerView = view.findViewById(R.id.recycler_view_question_sets);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new TeacherQuizAdapter();
-        adapter.setOnItemClickListener(this); // Set the click listener
+        adapter = new QuestionSetAdapter();
+        adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(AssignmentsTeacherViewModel.class);
-        viewModel.getQuizzes().observe(getViewLifecycleOwner(), quizzes -> { // Observe quizzes
-            if (quizzes != null) {
-                Log.d(TAG, "Đã tải danh sách bài kiểm tra cho giáo viên từ " + TAG + ". Số lượng: " + quizzes.size());
-                adapter.setQuizzes(quizzes);
+        viewModel.questionSets.observe(getViewLifecycleOwner(), questionSets -> {
+            if (questionSets != null) {
+                Log.d(TAG, "Đã tải danh sách bộ câu hỏi từ " + TAG + ". Số lượng: " + questionSets.size());
+                adapter.setQuestionSets(questionSets);
             }
         });
 
@@ -55,8 +56,8 @@ public class AssignmentsTeacherFragment extends Fragment implements TeacherQuizA
 
         FloatingActionButton fabAddAssignment = view.findViewById(R.id.fab_add_assignment);
         fabAddAssignment.setOnClickListener(v -> {
-            // This FAB should now lead to creating a new Quiz, not QuestionSet
-            Intent intent = new Intent(getActivity(), CreateQuizActivity.class); // Change to CreateQuizActivity
+            // Open CreateQuestionSetActivity to create a new question set
+            Intent intent = new Intent(getActivity(), CreateQuestionSetActivity.class);
             startActivity(intent);
         });
 
@@ -66,17 +67,15 @@ public class AssignmentsTeacherFragment extends Fragment implements TeacherQuizA
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.loadTeacherQuizzes(); // New method to load teacher's quizzes
+        viewModel.loadQuestionSets();
     }
 
     @Override
-    public void onItemClick(Quiz quiz) {
-        Log.d(TAG, "Đã nhấp vào bài kiểm tra trong " + TAG + ". Tiêu đề: " + quiz.getTitle());
-        // Handle item click: open QuizDetailTeacherActivity for viewing quiz details
-        Intent intent = new Intent(getActivity(), QuizDetailTeacherActivity.class);
-        intent.putExtra("quizId", quiz.getId());
-        // Pass classroomId if needed for QuizDetailTeacherActivity (it seems to be)
-        intent.putExtra("classroomId", quiz.getClassroomId()); 
+    public void onItemClick(QuestionSet questionSet) {
+        Log.d(TAG, "Đã nhấp vào bộ câu hỏi trong " + TAG + ". Tiêu đề: " + questionSet.getTitle());
+        // Open CreateQuestionSetActivity for editing the question set
+        Intent intent = new Intent(getActivity(), CreateQuestionSetActivity.class);
+        intent.putExtra("questionSetId", questionSet.getId());
         startActivity(intent);
     }
 } 

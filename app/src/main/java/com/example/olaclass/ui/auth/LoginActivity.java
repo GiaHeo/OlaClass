@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
+    private View loadingOverlay;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,9 +97,13 @@ public class LoginActivity extends AppCompatActivity {
         boolean autoLogin = getSharedPreferences("olaclass_prefs", MODE_PRIVATE).getBoolean("auto_login", false);
         cbAutoLogin.setChecked(autoLogin);
 
+        // Initialize loading overlay
+        loadingOverlay = findViewById(R.id.loading_overlay);
+        
         // Nếu đã đăng nhập và auto login, chuyển vào app luôn
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null && autoLogin) {
+            showLoading(true);
             checkUserRoleAndRedirect(currentUser.getUid());
             return;
         }
@@ -291,13 +297,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkUserRoleAndRedirect(String userId) {
-            db.collection("users").document(userId).get()
+        db.collection("users").document(userId).get()
             .addOnSuccessListener(documentSnapshot -> {
                 String role = "student"; // Default role
                 if (documentSnapshot.exists() && documentSnapshot.contains("role")) {
                     role = documentSnapshot.getString("role");
                 }
-                            goToMain(role);
+                goToMain(role);
             })
             .addOnFailureListener(e -> {
                 Log.e(TAG, "Lỗi khi kiểm tra vai trò người dùng: " + e.getMessage());
@@ -305,19 +311,38 @@ public class LoginActivity extends AppCompatActivity {
                 goToMain("student");
             });
     }
+    
+    private void showLoading(boolean show) {
+        runOnUiThread(() -> {
+            if (loadingOverlay != null) {
+                loadingOverlay.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+            // Disable all interactive elements while loading
+            findViewById(R.id.et_email).setEnabled(!show);
+            findViewById(R.id.et_password).setEnabled(!show);
+            findViewById(R.id.cb_auto_login).setEnabled(!show);
+            findViewById(R.id.rg_role).setEnabled(!show);
+            findViewById(R.id.btn_login).setEnabled(!show);
+            findViewById(R.id.btn_register).setEnabled(!show);
+            findViewById(R.id.btn_google_signin).setEnabled(!show);
+        });
+    }
 
     private void goToMain(String role) {
-        Intent intent;
-        if ("teacher".equals(role)) {
-            intent = new Intent(LoginActivity.this, MainActivityTeacher.class);
-            Log.d(TAG, "Chuyển hướng đến MainActivityTeacher");
-        } else {
-            intent = new Intent(LoginActivity.this, MainActivityStudent.class);
-            Log.d(TAG, "Chuyển hướng đến MainActivityStudent");
-        }
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        runOnUiThread(() -> {
+            showLoading(false);
+            Intent intent;
+            if ("teacher".equals(role)) {
+                intent = new Intent(LoginActivity.this, MainActivityTeacher.class);
+                Log.d(TAG, "Chuyển hướng đến MainActivityTeacher");
+            } else {
+                intent = new Intent(LoginActivity.this, MainActivityStudent.class);
+                Log.d(TAG, "Chuyển hướng đến MainActivityStudent");
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override
@@ -326,7 +351,10 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
+            showLoading(true);
             checkUserRoleAndRedirect(currentUser.getUid());
+        } else {
+            showLoading(false);
         }
     }
 }
