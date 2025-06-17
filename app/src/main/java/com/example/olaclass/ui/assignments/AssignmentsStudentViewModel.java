@@ -61,10 +61,21 @@ public class AssignmentsStudentViewModel extends ViewModel {
                                     allQuizzes.addAll((List<Quiz>) result);
                                 }
 
+                                // Filter out quizzes that ended more than 30 minutes ago
+                                long currentTime = System.currentTimeMillis();
+                                List<Quiz> validQuizzes = new ArrayList<>();
+                                for (Quiz quiz : allQuizzes) {
+                                    long quizEndTime = quiz.getEndTime();
+                                    // Keep quizzes that haven't ended yet or ended within the last 30 minutes
+                                    if (currentTime <= quizEndTime + (30 * 60 * 1000)) {
+                                        validQuizzes.add(quiz);
+                                    }
+                                }
+
                                 List<Task<Boolean>> checkAttemptTasks = new ArrayList<>();
                                 List<Quiz> quizzesToCheck = new ArrayList<>();
 
-                                for (Quiz quiz : allQuizzes) {
+                                for (Quiz quiz : validQuizzes) {
                                     checkAttemptTasks.add(quizAttemptRepository.getQuizAttemptsForStudentAndQuiz(currentUserId, quiz.getId())
                                             .continueWith(task -> task.getResult() != null && !task.getResult().isEmpty()));
                                     quizzesToCheck.add(quiz);
@@ -97,4 +108,4 @@ public class AssignmentsStudentViewModel extends ViewModel {
                     _errorMessage.setValue("Lỗi tải lớp học: " + e.getMessage());
                 });
     }
-} 
+}

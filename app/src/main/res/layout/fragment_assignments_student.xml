@@ -3,24 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     tools:context=".ui.assignments.AssignmentsStudentFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_quizzes"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text_view_no_quizzes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Không có bài kiểm tra nào chưa làm." 
-        android:layout_gravity="center"
-        android:textSize="18sp"
-        android:visibility="gone"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="Danh sách bài tập (Học sinh)"
+            app:titleTextColor="@android:color/white"
+            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
 
-</FrameLayout> 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_quizzes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            android:scrollbars="vertical" >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/text_view_no_quizzes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Không có bài kiểm tra nào chưa làm."
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</FrameLayout>

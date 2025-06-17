@@ -77,11 +77,47 @@ public class AssignmentsStudentFragment extends Fragment implements QuizAdapter.
 
     @Override
     public void onItemClick(Quiz quiz) {
-        // Handle quiz click: Navigate to QuizAttemptActivity for students
-        Toast.makeText(getContext(), "Bắt đầu bài kiểm tra: " + quiz.getTitle(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), QuizAttemptActivity.class);
-        intent.putExtra("quizId", quiz.getId());
-        intent.putExtra("classroomId", quiz.getClassroomId()); // Pass classroomId if needed
-        startActivity(intent);
+        long currentTime = System.currentTimeMillis();
+        long startTime = quiz.getStartTime();
+        long endTime = quiz.getEndTime();
+        
+        if (currentTime < startTime) {
+            // Quiz hasn't started yet
+            long minutesUntilStart = (startTime - currentTime) / (60 * 1000);
+            String message;
+            
+            if (minutesUntilStart < 60) {
+                // Less than 1 hour until start
+                message = String.format("Vui lòng đợi đến thời gian bắt đầu. Còn %d phút nữa.", minutesUntilStart);
+            } else {
+                // More than 1 hour until start
+                long hours = minutesUntilStart / 60;
+                long minutes = minutesUntilStart % 60;
+                message = String.format("Vui lòng đợi đến thời gian bắt đầu. Còn %d giờ %d phút nữa.", hours, minutes);
+            }
+            
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        } else if (currentTime > endTime) {
+            // Quiz has already ended
+            Toast.makeText(getContext(), "Bài kiểm tra đã kết thúc.", Toast.LENGTH_LONG).show();
+        } else {
+            // Quiz is active
+            long timeLeft = endTime - currentTime;
+            long minutesLeft = timeLeft / (60 * 1000);
+            
+            if (minutesLeft < 5) {
+                // Less than 5 minutes left
+                Toast.makeText(getContext(), 
+                    String.format("Bài kiểm tra sẽ kết thúc sau %d phút nữa. Hãy nhanh tay hoàn thành!", minutesLeft), 
+                    Toast.LENGTH_LONG).show();
+            }
+            
+            // Start the quiz attempt
+            Intent intent = new Intent(getActivity(), QuizAttemptActivity.class);
+            intent.putExtra("quizId", quiz.getId());
+            intent.putExtra("classroomId", quiz.getClassroomId());
+            intent.putExtra("timeLeft", timeLeft);
+            startActivity(intent);
+        }
     }
 } 
