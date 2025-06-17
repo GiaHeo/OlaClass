@@ -80,6 +80,9 @@
             android:windowSoftInputMode="adjustResize" />
             
         <!-- Old Activities (Deprecated) -->
+        <!-- tools:node="remove" indicates this activity is removed from the merged manifest. -->
+        <!-- This entry is kept here for reference or in case it needs to be restored. -->
+        <!--
         <activity
             android:name=".ui.teacher.TeacherHomeActivity"
             android:exported="false"
@@ -89,10 +92,11 @@
             android:name=".ui.student.StudentHomeActivity"
             android:exported="false"
             tools:node="remove" />
+        -->
             
         <!-- Firebase Cloud Messaging Service -->
         <service
-            android:name=".utils.messaging.FirebaseMessagingService"
+            android:name=".notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -120,9 +124,6 @@
         <!-- Language Switcher Activity -->
         <activity android:name=".ui.shared.LanguageActivity" />
         
-        <activity android:name=".ui.classroom.ClassroomListActivity"
-            android:exported="false" />
-            
         <activity android:name=".ui.classroom.ClassroomDetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -137,6 +138,10 @@
 
         <activity android:name=".ui.assignments.CreateQuizActivity"
             android:exported="false" />
+            
+        <activity android:name=".ui.classroom.CreateAnnouncementActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

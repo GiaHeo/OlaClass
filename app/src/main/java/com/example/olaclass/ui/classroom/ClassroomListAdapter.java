@@ -102,7 +102,7 @@ public class ClassroomListAdapter extends PagingDataAdapter<Classroom, Classroom
         
         @Override
         public boolean areContentsTheSame(@NonNull Classroom oldItem, @NonNull Classroom newItem) {
-            if (oldItem == newItem) return true;
+            if (oldItem.equals(newItem)) return true;
             if (oldItem == null || newItem == null) return false;
             return oldItem.equals(newItem);
         }

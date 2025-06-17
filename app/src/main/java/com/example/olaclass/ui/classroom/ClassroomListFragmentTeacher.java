@@ -95,14 +95,10 @@ public class ClassroomListFragmentTeacher extends Fragment implements ClassroomL
             adapter = new ClassroomListAdapter(this);
 
             FloatingActionButton fabAddClassroom = view.findViewById(R.id.fab_add_classroom);
-            FloatingActionButton fabJoinClassroom = view.findViewById(R.id.fab_join_classroom);
 
             if (fabAddClassroom != null) {
                 fabAddClassroom.setVisibility(View.VISIBLE);
                 fabAddClassroom.setOnClickListener(v -> showCreateClassroomDialog());
-            }
-            if (fabJoinClassroom != null) {
-                fabJoinClassroom.setVisibility(View.GONE);
             }
 
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

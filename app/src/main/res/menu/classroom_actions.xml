@@ -2,26 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
-    <!-- Loại bỏ mục Sao chép mã mời -->
-    <!--
-    <item
-        android:id="@+id/action_copy_invite"
-        android:title="Sao chép mã mời"
-        android:icon="@drawable/ic_content_copy"
-        app:showAsAction="ifRoom" />
-    -->
-        
     <item
         android:id="@+id/action_create_announcement"
-        android:title="@string/create_announcement"
+        android:title="Tạo thông báo"
         android:icon="@drawable/ic_announcement"
-        app:showAsAction="ifRoom" />
-
+        app:showAsAction="never" />
+        
     <item
         android:id="@+id/action_create_quiz"
         android:title="Tạo bài kiểm tra"
         android:icon="@drawable/ic_assignment"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
         
     <item
         android:id="@+id/action_delete_classroom"

@@ -242,9 +242,10 @@ public class ClassroomDetailActivity extends AppCompatActivity {
     }
     
     private void createNewAnnouncement() {
-        // TODO: Mở màn hình tạo thông báo mới
-        Toast.makeText(this, "Mở màn hình tạo thông báo cho lớp " + classroomId, 
-            Toast.LENGTH_SHORT).show();
+        // Open CreateAnnouncementActivity with the classroom ID
+        Intent intent = new Intent(this, CreateAnnouncementActivity.class);
+        intent.putExtra("classroomId", classroomId);
+        startActivity(intent);
     }
 
     private void createNewQuiz() {

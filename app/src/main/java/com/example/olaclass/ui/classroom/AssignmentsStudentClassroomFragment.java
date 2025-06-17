@@ -54,6 +54,7 @@ public class AssignmentsStudentClassroomFragment extends Fragment implements Stu
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_assignments_student_classroom, container, false);
+        Log.d(TAG, "Inflating layout: fragment_assignments_student_classroom.xml");
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

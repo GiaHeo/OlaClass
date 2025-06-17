@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
 import com.example.olaclass.data.repository.QuizRepository;
-import com.example.olaclass.ui.assignments.QuizAdapter;
+import com.example.olaclass.ui.assignments.TeacherQuizAdapter;
 import com.example.olaclass.ui.assignments.QuizDetailTeacherActivity;
 import com.example.olaclass.ui.assignments.QuizAttemptActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignmentsTeacherClassroomFragment extends Fragment implements QuizAdapter.OnItemClickListener {
+public class AssignmentsTeacherClassroomFragment extends Fragment implements TeacherQuizAdapter.OnItemClickListener {
 
     private RecyclerView quizzesRecyclerView;
-    private QuizAdapter quizAdapter;
+    private TeacherQuizAdapter quizAdapter;
     private QuizRepository quizRepository;
     private String classroomId;
     private FirebaseAuth mAuth;
@@ -43,6 +43,7 @@ public class AssignmentsTeacherClassroomFragment extends Fragment implements Qui
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_assignments_teacher_classroom, container, false);
+        Log.d(TAG, "Inflating layout: fragment_assignments_teacher_classroom.xml");
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -60,7 +61,7 @@ public class AssignmentsTeacherClassroomFragment extends Fragment implements Qui
 
         quizzesRecyclerView = view.findViewById(R.id.recycler_view_quizzes);
         quizzesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        quizAdapter = new QuizAdapter();
+        quizAdapter = new TeacherQuizAdapter();
         quizAdapter.setOnItemClickListener(this);
         quizzesRecyclerView.setAdapter(quizAdapter);
 
@@ -91,7 +92,7 @@ public class AssignmentsTeacherClassroomFragment extends Fragment implements Qui
     private void loadQuizzes() {
         quizRepository.getQuizzesByClassroomId(classroomId)
             .addOnSuccessListener(quizzes -> {
-                Log.d(TAG, "Quizzes loaded successfully. Count: " + quizzes.size());
+                Log.d(TAG, "Đã tải danh sách bài kiểm tra cho giáo viên từ " + TAG + ". Số lượng: " + quizzes.size());
                 quizAdapter.setQuizzes(quizzes);
                 if (quizzes.isEmpty()) {
                     Toast.makeText(getContext(), "Chưa có bài kiểm tra nào.", Toast.LENGTH_SHORT).show();
@@ -105,6 +106,7 @@ public class AssignmentsTeacherClassroomFragment extends Fragment implements Qui
 
     @Override
     public void onItemClick(Quiz quiz) {
+        Log.d(TAG, "Đã nhấp vào bài kiểm tra trong " + TAG + ". Tiêu đề: " + quiz.getTitle());
         String currentClassroomId = null;
         if (getActivity() != null && getActivity() instanceof ClassroomDetailActivity) {
             currentClassroomId = ((ClassroomDetailActivity) getActivity()).getClassroomId();

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +20,7 @@ public class ClassroomInfoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_classroom_info, container, false);
+        Log.d("ClassroomInfoFragment", "Inflating layout: fragment_classroom_info.xml");
         String classroomId = getArguments() != null ? getArguments().getString("classroomId") : "";
         TextView tvName = view.findViewById(R.id.tv_name);
         TextView tvDescription = view.findViewById(R.id.tv_description);

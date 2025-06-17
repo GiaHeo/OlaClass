@@ -2,6 +2,7 @@ package com.example.olaclass.ui.assignments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class AssignmentsTeacherFragment extends Fragment implements QuizAdapter.OnItemClickListener {
+public class AssignmentsTeacherFragment extends Fragment implements TeacherQuizAdapter.OnItemClickListener {
 
     private AssignmentsTeacherViewModel viewModel;
-    private QuizAdapter adapter;
+    private TeacherQuizAdapter adapter;
     private RecyclerView recyclerView;
+    private static final String TAG = "AssignmentsTeacherFragment";
 
     @Nullable
     @Override
@@ -33,13 +35,14 @@ public class AssignmentsTeacherFragment extends Fragment implements QuizAdapter.
         
         recyclerView = view.findViewById(R.id.recycler_view_question_sets); // Assuming this ID is for quizzes now
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QuizAdapter(); // Change to QuizAdapter
+        adapter = new TeacherQuizAdapter();
         adapter.setOnItemClickListener(this); // Set the click listener
         recyclerView.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(AssignmentsTeacherViewModel.class);
         viewModel.getQuizzes().observe(getViewLifecycleOwner(), quizzes -> { // Observe quizzes
             if (quizzes != null) {
+                Log.d(TAG, "Đã tải danh sách bài kiểm tra cho giáo viên từ " + TAG + ". Số lượng: " + quizzes.size());
                 adapter.setQuizzes(quizzes);
             }
         });
@@ -68,6 +71,7 @@ public class AssignmentsTeacherFragment extends Fragment implements QuizAdapter.
 
     @Override
     public void onItemClick(Quiz quiz) {
+        Log.d(TAG, "Đã nhấp vào bài kiểm tra trong " + TAG + ". Tiêu đề: " + quiz.getTitle());
         // Handle item click: open QuizDetailTeacherActivity for viewing quiz details
         Intent intent = new Intent(getActivity(), QuizDetailTeacherActivity.class);
         intent.putExtra("quizId", quiz.getId());

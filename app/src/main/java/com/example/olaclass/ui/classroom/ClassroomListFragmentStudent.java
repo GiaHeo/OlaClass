@@ -142,14 +142,14 @@ public class ClassroomListFragmentStudent extends Fragment implements ClassroomL
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Tham gia lớp học bằng mã mời");
 
-        final EditText input = new EditText(requireContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Nhập mã mời");
-        builder.setView(input);
+        // Inflate the custom layout for the dialog
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_paste_invite_code, null);
+        builder.setView(dialogView);
 
-        // Add paste button
-        ImageButton pasteButton = new ImageButton(requireContext());
-        pasteButton.setImageResource(R.drawable.ic_content_copy); // Assuming you have this drawable
+        final EditText input = dialogView.findViewById(R.id.et_invite_code);
+        ImageButton pasteButton = dialogView.findViewById(R.id.btn_paste);
+
         pasteButton.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null && clipboard.hasPrimaryClip()) {
@@ -161,12 +161,6 @@ public class ClassroomListFragmentStudent extends Fragment implements ClassroomL
                 Toast.makeText(requireContext(), "Không có gì để dán từ clipboard.", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Add paste button next to EditText in a horizontal layout
-        // This part needs a bit more work if you want a custom layout in the AlertDialog.
-        // For simplicity, for now, we'll just set the view to the EditText.
-        // If you want a more complex layout, you'd inflate a custom layout XML.
-
 
         builder.setPositiveButton("Tham gia", (dialog, which) -> {
             String inviteCode = input.getText().toString().trim();

@@ -17,9 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
-
+import com.example.olaclass.ui.assignments.QuizAdapter;
+import com.example.olaclass.ui.assignments.QuizAttemptActivity;
+import com.example.olaclass.ui.assignments.QuizDetailTeacherActivity;
+import com.example.olaclass.ui.classroom.ClassroomDetailActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class AssignmentsStudentFragment extends Fragment implements QuizAdapter.OnItemClickListener {
 
     private AssignmentsStudentViewModel viewModel;

@@ -13,7 +13,9 @@ import com.example.olaclass.ui.profile.ProfileFragment;
 import com.example.olaclass.utils.AuthUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivityStudent extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

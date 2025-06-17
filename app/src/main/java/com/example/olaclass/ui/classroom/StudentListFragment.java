@@ -57,6 +57,7 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_list, container, false);
+        Log.d("StudentListFragment", "Inflating layout: fragment_student_list.xml");
         recyclerView = view.findViewById(R.id.recycler_students);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
