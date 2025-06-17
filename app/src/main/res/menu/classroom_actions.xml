@@ -29,4 +29,10 @@
         android:titleTextColor="@color/red"
         android:icon="@drawable/ic_delete"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_leave_classroom"
+        android:title="@string/leave_classroom"
+        android:icon="@drawable/ic_logout"
+        app:showAsAction="never" />
 </menu>

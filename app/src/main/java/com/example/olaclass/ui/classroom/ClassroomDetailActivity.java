@@ -5,7 +5,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -23,9 +25,18 @@ import com.example.olaclass.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FieldValue;
 
 public class ClassroomDetailActivity extends AppCompatActivity {
     private String classroomId;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String currentUserRole; // To store the role of the current user
+    private FloatingActionButton fabActions; // Declare FAB here
+    
+    private static final String TAG = "ClassroomDetailActivity"; // Define TAG here
     
     public String getClassroomId() {
         return classroomId;
@@ -35,6 +46,9 @@ public class ClassroomDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classroom_detail);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Setup Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -58,7 +72,9 @@ public class ClassroomDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(new ClassroomPagerAdapter(this, classroomId));
         
         // Setup Floating Action Button
-        setupFloatingActionButton();
+        fabActions = findViewById(R.id.fab_actions); // Initialize FAB here
+        fabActions.setVisibility(View.GONE); // Initially hide the FAB until role is determined
+        fabActions.setOnClickListener(v -> showClassroomActionsMenu(v));
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
@@ -73,19 +89,113 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                     break;
             }
         }).attach();
+
+        // Fetch user role and invalidate options menu
+        fetchUserRole();
     }
 
-    private void setupFloatingActionButton() {
-        FloatingActionButton fabActions = findViewById(R.id.fab_actions);
-        fabActions.setOnClickListener(v -> showClassroomActionsMenu(v));
+    private void fetchUserRole() {
+        if (mAuth.getCurrentUser() != null) {
+            db.collection("users").document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        currentUserRole = documentSnapshot.getString("role");
+                        Log.d(TAG, "Vai trò người dùng đã tải: " + currentUserRole);
+                        // Now that role is known, make FAB visible
+                        fabActions.setVisibility(View.VISIBLE); 
+                        // Invalidate the options menu to redraw it with updated visibility
+                        invalidateOptionsMenu(); 
+                    } else {
+                        // User document not found, hide FAB
+                        fabActions.setVisibility(View.GONE);
+                        Log.w(TAG, "Không tìm thấy tài liệu người dùng cho ID: " + mAuth.getCurrentUser().getUid());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Lỗi tải vai trò người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Lỗi khi tải vai trò người dùng: " + e.getMessage(), e);
+                    // On error, hide FAB
+                    fabActions.setVisibility(View.GONE);
+                });
+        } else {
+            // No current user, hide FAB
+            fabActions.setVisibility(View.GONE);
+            Log.w(TAG, "Không có người dùng hiện tại, ẩn FAB.");
+        }
     }
-    
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.classroom_actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d(TAG, "onPrepareOptionsMenu: Vai trò người dùng hiện tại: " + currentUserRole);
+        MenuItem createAnnouncement = menu.findItem(R.id.action_create_announcement);
+        MenuItem createQuiz = menu.findItem(R.id.action_create_quiz);
+        MenuItem deleteClassroom = menu.findItem(R.id.action_delete_classroom);
+        MenuItem leaveClassroom = menu.findItem(R.id.action_leave_classroom);
+
+        if ("teacher".equals(currentUserRole)) {
+            createAnnouncement.setVisible(true);
+            createQuiz.setVisible(true);
+            deleteClassroom.setVisible(true);
+            leaveClassroom.setVisible(false);
+            Log.d(TAG, "Đặt menu cho giáo viên.");
+        } else if ("student".equals(currentUserRole)) {
+            createAnnouncement.setVisible(false);
+            createQuiz.setVisible(false);
+            deleteClassroom.setVisible(false);
+            leaveClassroom.setVisible(true);
+            Log.d(TAG, "Đặt menu cho học sinh.");
+        } else {
+            // Default to hiding all actions if role is unknown or not set
+            createAnnouncement.setVisible(false);
+            createQuiz.setVisible(false);
+            deleteClassroom.setVisible(false);
+            leaveClassroom.setVisible(false);
+            Log.d(TAG, "Ẩn tất cả các mục menu do vai trò không xác định hoặc chưa được đặt.");
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     private void showClassroomActionsMenu(View anchor) {
+        Log.d(TAG, "showClassroomActionsMenu: Vai trò người dùng hiện tại: " + currentUserRole);
         // Tạo PopupMenu với style tùy chỉnh
         Context wrapper = new android.view.ContextThemeWrapper(this, R.style.CustomPopupMenu);
         PopupMenu popup = new PopupMenu(wrapper, anchor);
         popup.getMenuInflater().inflate(R.menu.classroom_actions, popup.getMenu());
         
+        // Re-apply visibility logic for PopupMenu
+        MenuItem createAnnouncement = popup.getMenu().findItem(R.id.action_create_announcement);
+        MenuItem createQuiz = popup.getMenu().findItem(R.id.action_create_quiz);
+        MenuItem deleteClassroom = popup.getMenu().findItem(R.id.action_delete_classroom);
+        MenuItem leaveClassroom = popup.getMenu().findItem(R.id.action_leave_classroom);
+
+        if ("teacher".equals(currentUserRole)) {
+            createAnnouncement.setVisible(true);
+            createQuiz.setVisible(true);
+            deleteClassroom.setVisible(true);
+            leaveClassroom.setVisible(false);
+            Log.d(TAG, "Đặt PopupMenu cho giáo viên.");
+        } else if ("student".equals(currentUserRole)) {
+            createAnnouncement.setVisible(false);
+            createQuiz.setVisible(false);
+            deleteClassroom.setVisible(false);
+            leaveClassroom.setVisible(true);
+            Log.d(TAG, "Đặt PopupMenu cho học sinh.");
+        } else {
+            // Default to hiding all actions if role is unknown or not set
+            createAnnouncement.setVisible(false);
+            createQuiz.setVisible(false);
+            deleteClassroom.setVisible(false);
+            leaveClassroom.setVisible(false);
+            Log.d(TAG, "Ẩn tất cả các mục PopupMenu do vai trò không xác định hoặc chưa được đặt.");
+        }
+
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.action_create_announcement) {
@@ -102,6 +212,9 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                 deleteItem.setTitle(s);
                 showDeleteClassroomDialog();
                 return true;
+            } else if (id == R.id.action_leave_classroom) {
+                showLeaveClassroomConfirmation();
+                return true;
             }
             return false;
         });
@@ -117,10 +230,6 @@ public class ClassroomDetailActivity extends AppCompatActivity {
     }
 
     private void createNewQuiz() {
-        // TODO: Mở màn hình tạo bài kiểm tra mới
-        // Toast.makeText(this, "Mở màn hình tạo bài kiểm tra cho lớp " + classroomId,
-        //     Toast.LENGTH_SHORT).show();
-        
         Intent intent = new Intent(this, CreateQuizActivity.class);
         intent.putExtra("classroomId", classroomId);
         startActivity(intent);
@@ -141,8 +250,7 @@ public class ClassroomDetailActivity extends AppCompatActivity {
             return;
         }
         // Xóa classroom trong Firestore
-        com.google.firebase.firestore.FirebaseFirestore.getInstance()
-            .collection("classrooms").document(classroomId)
+        db.collection("classrooms").document(classroomId) // Use db instance
             .delete()
             .addOnSuccessListener(aVoid -> {
                 Toast.makeText(this, "Đã xóa lớp học", Toast.LENGTH_SHORT).show();
@@ -151,6 +259,34 @@ public class ClassroomDetailActivity extends AppCompatActivity {
             .addOnFailureListener(e -> {
                 Toast.makeText(this, "Lỗi khi xóa lớp: " + e.getMessage(), Toast.LENGTH_LONG).show();
             });
+    }
+
+    private void showLeaveClassroomConfirmation() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Rời khỏi lớp học")
+                .setMessage("Bạn có chắc chắn muốn rời khỏi lớp học này không?")
+                .setPositiveButton("Rời khỏi", (dialog, which) -> leaveClassroom())
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void leaveClassroom() {
+        String userId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
+        if (userId == null || classroomId == null || classroomId.isEmpty()) {
+            Toast.makeText(this, "Lỗi: Không thể rời khỏi lớp học", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Remove student from the classroom's 'students' array
+        db.collection("classrooms").document(classroomId)
+                .update("students", FieldValue.arrayRemove(userId)) // Use FieldValue
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Đã rời khỏi lớp học", Toast.LENGTH_SHORT).show();
+                    finish(); // Close the activity after leaving the classroom
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Lỗi khi rời khỏi lớp học: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
     
     @Override
