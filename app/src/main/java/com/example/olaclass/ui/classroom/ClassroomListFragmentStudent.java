@@ -187,12 +187,17 @@ public class ClassroomListFragmentStudent extends Fragment implements ClassroomL
             String studentId = currentUser.getUid();
             ClassroomRepository classroomRepository = new ClassroomRepository(db, mAuth);
             classroomRepository.joinClassroom(inviteCode, studentId)
-                    .addOnSuccessListener(aVoid -> {
+                    .addOnSuccessListener(classroom -> {
                         Toast.makeText(requireContext(), "Tham gia lớp học thành công!", Toast.LENGTH_SHORT).show();
                         viewModel.refreshClassrooms();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(requireContext(), "Lỗi khi tham gia lớp học: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        if (e instanceof ClassroomRepository.AlreadyJoinedClassroomException) {
+                            Classroom alreadyJoinedClassroom = ((ClassroomRepository.AlreadyJoinedClassroomException) e).getClassroom();
+                            Toast.makeText(requireContext(), "Bạn đã vào lớp " + alreadyJoinedClassroom.getName() + " từ trước rồi.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(requireContext(), "Lỗi khi tham gia lớp học: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                         Log.e("ClassroomListFragmentStudent", "Lỗi khi tham gia lớp học: " + e.getMessage());
                     });
         }

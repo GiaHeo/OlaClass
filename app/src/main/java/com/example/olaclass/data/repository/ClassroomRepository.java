@@ -115,9 +115,30 @@ public class ClassroomRepository {
     }
 
     // Lấy danh sách lớp học phân trang mà học sinh đã tham gia
-    // Hiện tại phương thức này sẽ trả về PagingData rỗng để tránh crash
     public Flowable<PagingData<Classroom>> getJoinedClassroomsPaged() {
-        return Flowable.just(PagingData.empty());
+        String currentUserId = mAuth.getCurrentUser() != null ?
+                mAuth.getCurrentUser().getUid() : null;
+
+        if (currentUserId == null) {
+            Log.e("ClassroomRepository", "currentUserId null khi lấy lớp học đã tham gia");
+            return Flowable.just(PagingData.empty());
+        }
+
+        Log.d("ClassroomRepository", "Querying joined classrooms for studentId = " + currentUserId);
+
+        // Query to find classrooms where the 'students' array contains the current userId
+        Query query = classroomRef.whereArrayContains("students", currentUserId);
+
+        PagingConfig pagingConfig = new PagingConfig(
+            /* pageSize = */ 10,
+            /* prefetchDistance = */ 20,
+            /* enablePlaceholders = */ false
+        );
+
+        return PagingRx.getFlowable(new Pager<>(
+            pagingConfig,
+            () -> new ClassroomPagingSource(query)
+        ));
     }
 
     // Tạo liên kết mời có thể chia sẻ cho lớp học dựa trên mã code đã lưu
@@ -210,20 +231,49 @@ public class ClassroomRepository {
         return classroomRef.document(classroomId).update("students", FieldValue.arrayRemove(studentId));
     }
 
+    // Custom exception to indicate that the student is already in the classroom
+    public static class AlreadyJoinedClassroomException extends Exception {
+        private final Classroom classroom;
+        public AlreadyJoinedClassroomException(Classroom classroom) {
+            super("Bạn đã vào lớp " + classroom.getName() + " từ trước rồi.");
+            this.classroom = classroom;
+        }
+        public Classroom getClassroom() {
+            return classroom;
+        }
+    }
+
     // Tham gia lớp học với mã mời
-    public Task<Void> joinClassroom(String inviteCode, String studentId) {
+    public Task<Classroom> joinClassroom(String inviteCode, String studentId) {
         return classroomRef.whereEqualTo("inviteCode", inviteCode).get()
                 .continueWithTask(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         DocumentSnapshot classroomDoc = task.getResult().getDocuments().get(0);
-                        String classroomId = classroomDoc.getId();
-                        Map<String, Object> studentData = new HashMap<>();
-                        studentData.put("userId", studentId); // Add student ID to the student data
-                        // You might want to get student name/email from FirebaseAuth or another source
-                        // For now, let's just add the userId
-                        return classroomRef.document(classroomId).update("students", com.google.firebase.firestore.FieldValue.arrayUnion(studentId));
+                        Classroom classroom = classroomDoc.toObject(Classroom.class);
+                        if (classroom != null) {
+                            classroom.setId(classroomDoc.getId()); // Set the ID from the document
+                            List<String> studentIdsInClass = (List<String>) classroomDoc.get("students");
+                            if (studentIdsInClass != null && studentIdsInClass.contains(studentId)) {
+                                // Student is already a member
+                                Log.d("ClassroomRepository", "Student " + studentId + " already in class " + classroom.getName());
+                                return Tasks.forException(new AlreadyJoinedClassroomException(classroom));
+                            } else {
+                                // Student is not a member, add them
+                                Log.d("ClassroomRepository", "Adding student " + studentId + " to class " + classroom.getName());
+                                return classroomRef.document(classroom.getId()).update("students", FieldValue.arrayUnion(studentId))
+                                        .continueWith(addStudentTask -> {
+                                            if (addStudentTask.isSuccessful()) {
+                                                return classroom; // Successfully joined
+                                            } else {
+                                                throw addStudentTask.getException(); // Propagate failure from update
+                                            }
+                                        });
+                            }
+                        } else {
+                            throw new Exception("Lỗi: Không thể chuyển đổi tài liệu lớp học.");
+                        }
                     } else {
-                        throw new Exception("Invalid invite code or classroom not found.");
+                        throw new Exception("Mã mời không hợp lệ hoặc lớp học không tìm thấy.");
                     }
                 });
     }
