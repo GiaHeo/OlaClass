@@ -99,15 +99,21 @@
             </intent-filter>
         </service>
 
-        <!-- Quiz Detail Activity -->
+        <!-- Quiz Detail Teacher Activity (formerly QuizDetailActivity) -->
         <activity
-            android:name=".ui.assignments.QuizDetailActivity"
+            android:name=".ui.assignments.QuizDetailTeacherActivity"
             android:exported="false"
             android:theme="@style/Theme.OlaClass" />
 
         <!-- View Quiz Activity -->
         <activity
             android:name=".ui.assignments.ViewQuizActivity"
+            android:exported="false"
+            android:theme="@style/Theme.OlaClass" />
+
+        <!-- Quiz Attempt Activity for Students -->
+        <activity
+            android:name=".ui.assignments.QuizAttemptActivity"
             android:exported="false"
             android:theme="@style/Theme.OlaClass" />
 

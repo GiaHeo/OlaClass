@@ -4,17 +4,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.olaclass.data.model.QuestionSet;
-import com.example.olaclass.data.repository.QuestionRepository;
+import com.example.olaclass.data.model.Quiz;
+import com.example.olaclass.data.repository.QuizRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
 public class AssignmentsTeacherViewModel extends ViewModel {
 
-    private final QuestionRepository questionRepository;
-    private final MutableLiveData<List<QuestionSet>> _questionSets = new MutableLiveData<>();
-    public LiveData<List<QuestionSet>> questionSets = _questionSets;
+    private final QuizRepository quizRepository;
+    private final MutableLiveData<List<Quiz>> _quizzes = new MutableLiveData<>();
+    public LiveData<List<Quiz>> getQuizzes() {
+        return _quizzes;
+    }
 
     private final MutableLiveData<String> _errorMessage = new MutableLiveData<>();
     public LiveData<String> errorMessage = _errorMessage;
@@ -22,24 +24,24 @@ public class AssignmentsTeacherViewModel extends ViewModel {
     private final FirebaseAuth mAuth;
 
     public AssignmentsTeacherViewModel() {
-        questionRepository = new QuestionRepository();
+        quizRepository = new QuizRepository();
         mAuth = FirebaseAuth.getInstance();
-        loadQuestionSets();
+        loadTeacherQuizzes();
     }
 
-    public void loadQuestionSets() {
+    public void loadTeacherQuizzes() {
         String currentUserId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : null;
         if (currentUserId == null) {
             _errorMessage.setValue("Không tìm thấy ID người dùng.");
             return;
         }
 
-        questionRepository.getQuestionSetsByCreator(currentUserId)
-            .addOnSuccessListener(questionSetList -> {
-                _questionSets.setValue(questionSetList);
+        quizRepository.getQuizzesByCreator(currentUserId)
+            .addOnSuccessListener(quizList -> {
+                _quizzes.setValue(quizList);
             })
             .addOnFailureListener(e -> {
-                _errorMessage.setValue("Lỗi tải bộ câu hỏi: " + e.getMessage());
+                _errorMessage.setValue("Lỗi tải bài kiểm tra: " + e.getMessage());
             });
     }
 } 

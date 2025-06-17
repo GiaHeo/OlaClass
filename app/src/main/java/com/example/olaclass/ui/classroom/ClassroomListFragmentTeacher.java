@@ -214,38 +214,10 @@ public class ClassroomListFragmentTeacher extends Fragment implements ClassroomL
         startActivity(intent);
     }
 
-    @Override
-    public void onClassroomLongClick(View view, Classroom classroom) {
-        showClassroomActionsMenu(view, classroom);
-    }
-
-    private void showClassroomActionsMenu(View view, Classroom classroom) {
-        PopupMenu popup = new PopupMenu(requireContext(), view);
-        popup.getMenuInflater().inflate(R.menu.classroom_actions, popup.getMenu());
-
-        // Set delete option to red
-        MenuItem deleteItem = popup.getMenu().findItem(R.id.action_delete_classroom);
-        if (deleteItem != null) {
-            SpannableString s = new SpannableString(deleteItem.getTitle());
-            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark)), 0, s.length(), 0);
-            deleteItem.setTitle(s);
-        }
-
-        popup.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.action_delete_classroom) {
-                confirmDeleteClassroom(classroom);
-                return true;
-            }
-            return false;
-        });
-        popup.show();
-    }
-
     private void confirmDeleteClassroom(Classroom classroom) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Xác nhận xóa lớp học")
-                .setMessage("Bạn có chắc chắn muốn xóa lớp học '" + classroom.getName() + "' không? Hành động này không thể hoàn tác.")
+                .setMessage("Bạn có chắc chắn muốn xóa lớp học \'" + classroom.getName() + "\' không? Hành động này không thể hoàn tác.")
                 .setPositiveButton("Xóa", (dialog, which) -> deleteClassroom(classroom))
                 .setNegativeButton("Hủy", null)
                 .show();

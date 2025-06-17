@@ -19,7 +19,10 @@ import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
 import com.example.olaclass.data.repository.QuizRepository;
 import com.example.olaclass.ui.assignments.QuizAdapter;
-import com.example.olaclass.ui.assignments.QuizDetailActivity;
+import com.example.olaclass.ui.assignments.QuizDetailTeacherActivity;
+import com.example.olaclass.ui.assignments.QuizAttemptActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,9 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
     private QuizAdapter quizAdapter;
     private QuizRepository quizRepository;
     private String classroomId;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private String currentUserRole;
 
     private static final String TAG = "AssignmentInviteFrag";
 
@@ -37,6 +43,9 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_assignment_invite, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         if (getArguments() != null) {
             classroomId = getArguments().getString("classroomId");
@@ -57,9 +66,26 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
 
         quizRepository = new QuizRepository();
 
+        fetchUserRole();
         loadQuizzes();
 
         return view;
+    }
+
+    private void fetchUserRole() {
+        if (mAuth.getCurrentUser() != null) {
+            db.collection("users").document(mAuth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        currentUserRole = documentSnapshot.getString("role");
+                        Log.d(TAG, "Vai trò người dùng đã tải trong Fragment: " + currentUserRole);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Lỗi tải vai trò người dùng trong Fragment: " + e.getMessage(), e);
+                });
+        }
     }
 
     private void loadQuizzes() {
@@ -79,18 +105,28 @@ public class AssignmentInviteFragment extends Fragment implements QuizAdapter.On
 
     @Override
     public void onItemClick(Quiz quiz) {
-        // Get the classroom ID from the parent activity if available
-        String classroomId = null;
+        String currentClassroomId = null;
         if (getActivity() != null && getActivity() instanceof ClassroomDetailActivity) {
-            classroomId = ((ClassroomDetailActivity) getActivity()).getClassroomId();
+            currentClassroomId = ((ClassroomDetailActivity) getActivity()).getClassroomId();
         }
-        
-        // Start QuizDetailActivity with quiz and classroom info
-        Intent intent = new Intent(getContext(), QuizDetailActivity.class);
-        intent.putExtra("quizId", quiz.getId());
-        if (classroomId != null) {
-            intent.putExtra("classroomId", classroomId);
+
+        if ("student".equals(currentUserRole)) {
+            Intent intent = new Intent(getContext(), QuizAttemptActivity.class);
+            intent.putExtra("quizId", quiz.getId());
+            if (currentClassroomId != null) {
+                intent.putExtra("classroomId", currentClassroomId);
+            }
+            startActivity(intent);
+        } else if ("teacher".equals(currentUserRole)) {
+            Intent intent = new Intent(getContext(), QuizDetailTeacherActivity.class);
+            intent.putExtra("quizId", quiz.getId());
+            if (currentClassroomId != null) {
+                intent.putExtra("classroomId", currentClassroomId);
+            }
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), "Không thể xác định vai trò người dùng.", Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "Vai trò người dùng không xác định hoặc chưa được tải khi nhấp vào bài kiểm tra.");
         }
-        startActivity(intent);
     }
 }

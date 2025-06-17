@@ -58,6 +58,27 @@ public class QuizRepository {
             });
     }
 
+    // Phương thức để lấy tất cả Quiz do một người tạo cụ thể
+    public Task<List<Quiz>> getQuizzesByCreator(String creatorId) {
+        return quizzesRef.whereEqualTo("creatorId", creatorId).get()
+                .continueWith(task -> {
+                    List<Quiz> quizList = new ArrayList<>();
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Quiz quiz = document.toObject(Quiz.class);
+                            quiz.setId(document.getId());
+                            quizList.add(quiz);
+                        }
+                    }
+                    return quizList;
+                });
+    }
+
+    // Phương thức để lấy tất cả Quiz cho một Classroom cụ thể (Alias for getQuizzesByClassroomId)
+    public Task<List<Quiz>> getQuizzesForClassroom(String classroomId) {
+        return getQuizzesByClassroomId(classroomId);
+    }
+
     // Phương thức để xóa một Quiz theo ID
     public Task<Void> deleteQuiz(String quizId) {
         return quizzesRef.document(quizId).delete();

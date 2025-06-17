@@ -21,8 +21,8 @@ import com.example.olaclass.data.model.Quiz;
 import com.example.olaclass.data.repository.QuizRepository;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class QuizDetailActivity extends AppCompatActivity {
-    private static final String TAG = "QuizDetailActivity";
+public class QuizDetailTeacherActivity extends AppCompatActivity {
+    private static final String TAG = "QuizDetailTeacherActivity";
     private QuizRepository quizRepository;
     private String quizId;
     private String classroomId;
@@ -32,7 +32,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz_detail);
+        setContentView(R.layout.activity_quiz_detail_teacher);
         
         // Get quiz ID from intent
         quizId = getIntent().getStringExtra("quizId");

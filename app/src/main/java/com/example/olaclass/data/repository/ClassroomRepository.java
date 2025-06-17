@@ -141,6 +141,22 @@ public class ClassroomRepository {
         ));
     }
 
+    // Lấy danh sách lớp học mà học sinh đã tham gia (không phân trang)
+    public Task<List<Classroom>> getClassroomsForStudent(String studentId) {
+        return classroomRef.whereArrayContains("students", studentId).get()
+                .continueWith(task -> {
+                    List<Classroom> classrooms = new ArrayList<>();
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Classroom classroom = document.toObject(Classroom.class);
+                            classroom.setId(document.getId());
+                            classrooms.add(classroom);
+                        }
+                    }
+                    return classrooms;
+                });
+    }
+
     // Tạo liên kết mời có thể chia sẻ cho lớp học dựa trên mã code đã lưu
     public Task<String> getInviteLink(String classId) {
         return classroomRef.document(classId).get().continueWith(task -> {

@@ -28,6 +28,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FieldValue;
+import androidx.core.content.ContextCompat;
 
 public class ClassroomDetailActivity extends AppCompatActivity {
     private String classroomId;
@@ -69,32 +70,17 @@ public class ClassroomDetailActivity extends AppCompatActivity {
         // Setup ViewPager và TabLayout
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         ViewPager2 viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new ClassroomPagerAdapter(this, classroomId));
         
         // Setup Floating Action Button
         fabActions = findViewById(R.id.fab_actions); // Initialize FAB here
         fabActions.setVisibility(View.GONE); // Initially hide the FAB until role is determined
         fabActions.setOnClickListener(v -> showClassroomActionsMenu(v));
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText("Thông tin lớp");
-                    break;
-                case 1:
-                    tab.setText("Học sinh");
-                    break;
-                case 2:
-                    tab.setText("Bài tập & Lời mời");
-                    break;
-            }
-        }).attach();
-
         // Fetch user role and invalidate options menu
-        fetchUserRole();
+        fetchUserRole(viewPager, tabLayout);
     }
 
-    private void fetchUserRole() {
+    private void fetchUserRole(ViewPager2 viewPager, TabLayout tabLayout) {
         if (mAuth.getCurrentUser() != null) {
             db.collection("users").document(mAuth.getCurrentUser().getUid())
                 .get()
@@ -102,25 +88,51 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                     if (documentSnapshot.exists()) {
                         currentUserRole = documentSnapshot.getString("role");
                         Log.d(TAG, "Vai trò người dùng đã tải: " + currentUserRole);
-                        // Now that role is known, make FAB visible
-                        fabActions.setVisibility(View.VISIBLE); 
+
+                        // Set up ViewPager adapter after role is fetched
+                        viewPager.setAdapter(new ClassroomPagerAdapter(this, classroomId, currentUserRole));
+                        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+                            switch (position) {
+                                case 0:
+                                    tab.setText("Thông tin lớp");
+                                    break;
+                                case 1:
+                                    tab.setText("Học sinh");
+                                    break;
+                                case 2:
+                                    tab.setText("Bài tập & Lời mời");
+                                    break;
+                            }
+                        }).attach();
+
+                        // Now that role is known, set FAB visibility based on role
+                        if ("student".equals(currentUserRole)) {
+                            fabActions.setVisibility(View.GONE);
+                        } else if ("teacher".equals(currentUserRole)) {
+                            fabActions.setVisibility(View.VISIBLE);
+                        } else {
+                            fabActions.setVisibility(View.GONE); // Default to hiding if role is unknown
+                        }
                         // Invalidate the options menu to redraw it with updated visibility
                         invalidateOptionsMenu(); 
                     } else {
-                        // User document not found, hide FAB
+                        // User document not found, hide FAB and disable viewpager
                         fabActions.setVisibility(View.GONE);
+                        viewPager.setEnabled(false);
                         Log.w(TAG, "Không tìm thấy tài liệu người dùng cho ID: " + mAuth.getCurrentUser().getUid());
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Lỗi tải vai trò người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Lỗi khi tải vai trò người dùng: " + e.getMessage(), e);
-                    // On error, hide FAB
+                    // On error, hide FAB and disable viewpager
                     fabActions.setVisibility(View.GONE);
+                    viewPager.setEnabled(false);
                 });
         } else {
-            // No current user, hide FAB
+            // No current user, hide FAB and disable viewpager
             fabActions.setVisibility(View.GONE);
+            viewPager.setEnabled(false);
             Log.w(TAG, "Không có người dùng hiện tại, ẩn FAB.");
         }
     }
@@ -180,7 +192,11 @@ public class ClassroomDetailActivity extends AppCompatActivity {
             createQuiz.setVisible(true);
             deleteClassroom.setVisible(true);
             leaveClassroom.setVisible(false);
-            Log.d(TAG, "Đặt PopupMenu cho giáo viên.");
+            // Set delete option to red for teacher's menu
+            android.text.SpannableString s = new android.text.SpannableString(deleteClassroom.getTitle());
+            s.setSpan(new android.text.style.ForegroundColorSpan(ContextCompat.getColor(this, R.color.red)), 0, s.length(), 0);
+            deleteClassroom.setTitle(s);
+            Log.d(TAG, "Đặt PopupMenu cho giáo viên. Đã đặt màu đỏ cho Xóa lớp học.");
         } else if ("student".equals(currentUserRole)) {
             createAnnouncement.setVisible(false);
             createQuiz.setVisible(false);
@@ -205,11 +221,6 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                 createNewQuiz();
                 return true;
             } else if (id == R.id.action_delete_classroom) {
-                // Đổi màu chữ menu thành đỏ
-                android.view.MenuItem deleteItem = item;
-                android.text.SpannableString s = new android.text.SpannableString(deleteItem.getTitle());
-                s.setSpan(new android.text.style.ForegroundColorSpan(getResources().getColor(R.color.red)), 0, s.length(), 0);
-                deleteItem.setTitle(s);
                 showDeleteClassroomDialog();
                 return true;
             } else if (id == R.id.action_leave_classroom) {
@@ -300,9 +311,11 @@ public class ClassroomDetailActivity extends AppCompatActivity {
 
     private static class ClassroomPagerAdapter extends FragmentStateAdapter {
         private final String classroomId;
-        public ClassroomPagerAdapter(FragmentActivity fa, String classroomId) {
+        private final String currentUserRole;
+        public ClassroomPagerAdapter(FragmentActivity fa, String classroomId, String currentUserRole) {
             super(fa);
             this.classroomId = classroomId;
+            this.currentUserRole = currentUserRole;
         }
         @Override
         public int getItemCount() {
@@ -318,7 +331,7 @@ public class ClassroomDetailActivity extends AppCompatActivity {
                     infoFragment.setArguments(args);
                     return infoFragment;
                 case 1:
-                    StudentListFragment studentFragment = new StudentListFragment();
+                    StudentListFragment studentFragment = StudentListFragment.newInstance(classroomId, currentUserRole);
                     studentFragment.setArguments(args);
                     return studentFragment;
                 case 2:

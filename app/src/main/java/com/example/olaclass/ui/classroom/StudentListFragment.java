@@ -32,12 +32,14 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
     private StudentListAdapter adapter;
     private StudentListViewModel viewModel;
     private String classroomId;
+    private String currentUserRole;
     private ClassroomRepository classroomRepository;
 
-    public static StudentListFragment newInstance(String classroomId) {
+    public static StudentListFragment newInstance(String classroomId, String currentUserRole) {
         StudentListFragment fragment = new StudentListFragment();
         Bundle args = new Bundle();
         args.putString("classroomId", classroomId);
+        args.putString("currentUserRole", currentUserRole);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +49,8 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomId = getArguments().getString("classroomId");
-            Log.d("StudentListFragment", "Classroom ID received in onCreate: " + classroomId);
+            currentUserRole = getArguments().getString("currentUserRole");
+            Log.d("StudentListFragment", "Classroom ID and currentUserRole received in onCreate: " + classroomId + ", " + currentUserRole);
         } else {
             Log.d("StudentListFragment", "Arguments are null in onCreate.");
         }
@@ -88,32 +91,35 @@ public class StudentListFragment extends Fragment implements StudentListAdapter.
 
     @Override
     public void onStudentClick(Student student) {
-        PopupMenu popup = new PopupMenu(requireContext(), recyclerView);
-        popup.getMenu().add(0, 0, 0, "Xóa học sinh").setIcon(R.drawable.ic_delete);
+        // Only show delete option if the current user is a teacher
+        if ("teacher".equals(currentUserRole)) {
+            PopupMenu popup = new PopupMenu(requireContext(), recyclerView);
+            popup.getMenu().add(0, 0, 0, "Xóa học sinh").setIcon(R.drawable.ic_delete);
 
-        popup.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if (id == 0) {
-                new AlertDialog.Builder(requireContext())
-                    .setTitle("Xóa học sinh")
-                    .setMessage("Bạn có chắc chắn muốn xóa học sinh " + student.getName() + " khỏi lớp này không?")
-                    .setPositiveButton("Xóa", (dialog, which) -> {
-                        classroomRepository.removeStudentFromClass(classroomId, student.getUserId())
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(requireContext(), "Đã xóa " + student.getName() + " khỏi lớp.", Toast.LENGTH_SHORT).show();
-                                viewModel.loadStudents();
-                            })
-                            .addOnFailureListener(e -> {
-                                Log.e("StudentListFragment", "Lỗi khi xóa học sinh: " + e.getMessage(), e);
-                                Toast.makeText(requireContext(), "Lỗi khi xóa học sinh: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            });
-                    })
-                    .setNegativeButton("Hủy", null)
-                    .show();
-                return true;
-            }
-            return false;
-        });
-        popup.show();
+            popup.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+                if (id == 0) {
+                    new AlertDialog.Builder(requireContext())
+                        .setTitle("Xóa học sinh")
+                        .setMessage("Bạn có chắc chắn muốn xóa học sinh " + student.getName() + " khỏi lớp này không?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            classroomRepository.removeStudentFromClass(classroomId, student.getUserId())
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(requireContext(), "Đã xóa " + student.getName() + " khỏi lớp.", Toast.LENGTH_SHORT).show();
+                                    viewModel.loadStudents();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e("StudentListFragment", "Lỗi khi xóa học sinh: " + e.getMessage(), e);
+                                    Toast.makeText(requireContext(), "Lỗi khi xóa học sinh: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                });
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+                    return true;
+                }
+                return false;
+            });
+            popup.show();
+        }
     }
 }

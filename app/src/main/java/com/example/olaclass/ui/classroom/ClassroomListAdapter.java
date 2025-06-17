@@ -16,7 +16,6 @@ public class ClassroomListAdapter extends PagingDataAdapter<Classroom, Classroom
     
     public interface OnClassroomClickListener {
         void onClassroomClick(Classroom classroom);
-        void onClassroomLongClick(View view, Classroom classroom);
     }
     
     public void setSelectedClassroom(Classroom classroom) {
@@ -90,13 +89,6 @@ public class ClassroomListAdapter extends PagingDataAdapter<Classroom, Classroom
                 if (listener != null) {
                     listener.onClassroomClick(classroom);
                 }
-            });
-
-            itemView.setOnLongClickListener(v -> {
-                if (listener != null) {
-                    listener.onClassroomLongClick(v, classroom);
-                }
-                return true;
             });
         }
     }

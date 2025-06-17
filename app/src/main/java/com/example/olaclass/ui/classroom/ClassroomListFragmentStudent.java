@@ -205,16 +205,9 @@ public class ClassroomListFragmentStudent extends Fragment implements ClassroomL
 
     @Override
     public void onClassroomClick(Classroom classroom) {
-        // Handle classroom click for student
-        // (e.g., navigate to ClassroomDetailActivity)
         android.content.Intent intent = new android.content.Intent(requireContext(), com.example.olaclass.ui.classroom.ClassroomDetailActivity.class);
         intent.putExtra("classroomId", classroom.getId());
         startActivity(intent);
-    }
-
-    @Override
-    public void onClassroomLongClick(View view, Classroom classroom) {
-        // Students typically don't have long click actions on classrooms
     }
 
     @Override

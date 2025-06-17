@@ -15,13 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.olaclass.R;
-import com.example.olaclass.data.model.QuestionSet;
+import com.example.olaclass.data.model.Quiz;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class AssignmentsTeacherFragment extends Fragment implements QuestionSetAdapter.OnItemClickListener {
+import java.util.ArrayList;
+
+public class AssignmentsTeacherFragment extends Fragment implements QuizAdapter.OnItemClickListener {
 
     private AssignmentsTeacherViewModel viewModel;
-    private QuestionSetAdapter adapter;
+    private QuizAdapter adapter;
     private RecyclerView recyclerView;
 
     @Nullable
@@ -29,15 +31,17 @@ public class AssignmentsTeacherFragment extends Fragment implements QuestionSetA
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_assignments_teacher, container, false);
         
-        recyclerView = view.findViewById(R.id.recycler_view_question_sets);
+        recyclerView = view.findViewById(R.id.recycler_view_question_sets); // Assuming this ID is for quizzes now
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new QuestionSetAdapter();
+        adapter = new QuizAdapter(); // Change to QuizAdapter
         adapter.setOnItemClickListener(this); // Set the click listener
         recyclerView.setAdapter(adapter);
 
         viewModel = new ViewModelProvider(this).get(AssignmentsTeacherViewModel.class);
-        viewModel.questionSets.observe(getViewLifecycleOwner(), questionSets -> {
-            adapter.setQuestionSets(questionSets);
+        viewModel.getQuizzes().observe(getViewLifecycleOwner(), quizzes -> { // Observe quizzes
+            if (quizzes != null) {
+                adapter.setQuizzes(quizzes);
+            }
         });
 
         viewModel.errorMessage.observe(getViewLifecycleOwner(), message -> {
@@ -48,7 +52,8 @@ public class AssignmentsTeacherFragment extends Fragment implements QuestionSetA
 
         FloatingActionButton fabAddAssignment = view.findViewById(R.id.fab_add_assignment);
         fabAddAssignment.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), CreateQuestionSetActivity.class);
+            // This FAB should now lead to creating a new Quiz, not QuestionSet
+            Intent intent = new Intent(getActivity(), CreateQuizActivity.class); // Change to CreateQuizActivity
             startActivity(intent);
         });
 
@@ -58,14 +63,16 @@ public class AssignmentsTeacherFragment extends Fragment implements QuestionSetA
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.loadQuestionSets(); // Reload data when returning to the fragment
+        viewModel.loadTeacherQuizzes(); // New method to load teacher's quizzes
     }
 
     @Override
-    public void onItemClick(QuestionSet questionSet) {
-        // Handle item click: open CreateQuestionSetActivity for editing
-        Intent intent = new Intent(getActivity(), CreateQuestionSetActivity.class);
-        intent.putExtra("questionSetId", questionSet.getId());
+    public void onItemClick(Quiz quiz) {
+        // Handle item click: open QuizDetailTeacherActivity for viewing quiz details
+        Intent intent = new Intent(getActivity(), QuizDetailTeacherActivity.class);
+        intent.putExtra("quizId", quiz.getId());
+        // Pass classroomId if needed for QuizDetailTeacherActivity (it seems to be)
+        intent.putExtra("classroomId", quiz.getClassroomId()); 
         startActivity(intent);
     }
 } 

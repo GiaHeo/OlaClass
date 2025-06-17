@@ -210,6 +210,11 @@ public class CreateQuizActivity extends AppCompatActivity {
         quizRepository.saveQuiz(newQuiz)
             .addOnSuccessListener(aVoid -> {
                 Toast.makeText(this, "Tạo bài kiểm tra thành công!", Toast.LENGTH_SHORT).show();
+                // Navigate to QuizDetailTeacherActivity
+                Intent intent = new Intent(CreateQuizActivity.this, QuizDetailTeacherActivity.class);
+                intent.putExtra("quizId", newQuiz.getId());
+                intent.putExtra("classroomId", newQuiz.getClassroomId());
+                startActivity(intent);
                 finish();
             })
             .addOnFailureListener(e -> {
