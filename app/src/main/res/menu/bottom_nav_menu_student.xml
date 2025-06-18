@@ -7,7 +7,7 @@
     <item
         android:id="@+id/nav_assignments"
         android:icon="@drawable/ic_assignment"
-        android:title="@string/assignment" />
+        android:title="@string/student_assignment" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_person"

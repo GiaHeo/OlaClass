@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -87,7 +88,15 @@ public class StudentQuizAdapter extends RecyclerView.Adapter<StudentQuizAdapter.
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(quizzes.get(position));
+                    Quiz clickedQuiz = quizzes.get(position);
+                    long currentTime = System.currentTimeMillis();
+                    long remainingTimeMillis = clickedQuiz.getEndTime() - currentTime;
+
+                    if (remainingTimeMillis <= 0) {
+                        Toast.makeText(itemView.getContext(), "Bài kiểm tra đã hết hạn.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        listener.onItemClick(clickedQuiz);
+                    }
                 }
             });
         }
