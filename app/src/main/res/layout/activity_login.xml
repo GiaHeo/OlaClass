@@ -43,7 +43,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:visibility="gone">
 
         <RadioGroup
             android:id="@+id/rg_role"
@@ -81,7 +82,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Đăng nhập với Google"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_google"
+        android:drawablePadding="8dp"
+        android:gravity="center"/>
 
     <!-- Loading Overlay -->
     <FrameLayout

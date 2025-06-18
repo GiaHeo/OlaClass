@@ -249,16 +249,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 } else {
                     // If sign in fails, display a message to the user.
-                    String errorMsg = "signInWithCredential:failure - " + 
-                        (task.getException() != null ? task.getException().getMessage() : "Unknown error");
-                    Log.e(TAG, methodTag + ": " + errorMsg, task.getException());
-                    
-                    runOnUiThread(() -> {
-                        Toast.makeText(LoginActivity.this, 
-                            "Đăng nhập Google thất bại: " + 
-                            (task.getException() != null ? task.getException().getMessage() : "Lỗi không xác định"), 
-                            Toast.LENGTH_LONG).show();
-                    });
+                    Log.w(TAG, methodTag + ": Firebase signInWithCredential:failure", task.getException());
+                    Toast.makeText(LoginActivity.this, "Xác thực Google thất bại: " + 
+                        task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
     }
@@ -293,39 +286,55 @@ public class LoginActivity extends AppCompatActivity {
             .addOnSuccessListener(aVoid -> Log.d(TAG, "User info saved successfully to Firestore for userId: " + userId))
             .addOnFailureListener(e -> {
                 Log.e(TAG, "Error saving user info to Firestore for userId: " + userId + ", error: " + e.getMessage(), e);
+                Toast.makeText(LoginActivity.this, "Lỗi lưu vai trò người dùng.", Toast.LENGTH_SHORT).show();
             });
     }
 
     private void checkUserRoleAndRedirect(String userId) {
         db.collection("users").document(userId).get()
             .addOnSuccessListener(documentSnapshot -> {
-                String role = "student"; // Default role
-                if (documentSnapshot.exists() && documentSnapshot.contains("role")) {
-                    role = documentSnapshot.getString("role");
+                if (documentSnapshot.exists()) {
+                    String role = documentSnapshot.getString("role");
+                    if (role != null) {
+                        goToMain(role);
+                    } else {
+                        // If role is not set, prompt user to select role
+                        Log.w(TAG, "User role not found for userId: " + userId + ". Prompting role selection.");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            showRoleSelectionDialog(user);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Lỗi: Không thể xác định người dùng để chọn vai trò.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
+                    // If user document does not exist, it's a new user or data issue, prompt to select role
+                    Log.w(TAG, "User document not found for userId: " + userId + ". Prompting role selection.");
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user != null) {
+                        showRoleSelectionDialog(user);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Lỗi: Không thể xác định người dùng để chọn vai trò.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                goToMain(role);
             })
             .addOnFailureListener(e -> {
                 Log.e(TAG, "Lỗi khi kiểm tra vai trò người dùng: " + e.getMessage());
-                // Mặc định là student nếu không lấy được vai trò
-                goToMain("student");
+                Toast.makeText(LoginActivity.this, "Lỗi kiểm tra vai trò người dùng.", Toast.LENGTH_SHORT).show();
             });
     }
     
     private void showLoading(boolean show) {
-        runOnUiThread(() -> {
-            if (loadingOverlay != null) {
-                loadingOverlay.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-            // Disable all interactive elements while loading
-            findViewById(R.id.et_email).setEnabled(!show);
-            findViewById(R.id.et_password).setEnabled(!show);
-            findViewById(R.id.cb_auto_login).setEnabled(!show);
-            findViewById(R.id.rg_role).setEnabled(!show);
-            findViewById(R.id.btn_login).setEnabled(!show);
-            findViewById(R.id.btn_register).setEnabled(!show);
-            findViewById(R.id.btn_google_signin).setEnabled(!show);
-        });
+        if (loadingOverlay != null) {
+            loadingOverlay.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        findViewById(R.id.et_email).setEnabled(!show);
+        findViewById(R.id.et_password).setEnabled(!show);
+        findViewById(R.id.cb_auto_login).setEnabled(!show);
+        findViewById(R.id.rg_role).setEnabled(!show);
+        findViewById(R.id.btn_login).setEnabled(!show);
+        findViewById(R.id.btn_register).setEnabled(!show);
+        findViewById(R.id.btn_google_signin).setEnabled(!show);
     }
 
     private void goToMain(String role) {
