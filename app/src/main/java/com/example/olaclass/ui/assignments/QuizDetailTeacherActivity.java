@@ -1,5 +1,7 @@
 package com.example.olaclass.ui.assignments;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import java.util.Locale;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.example.olaclass.R;
 import com.example.olaclass.data.model.Quiz;
@@ -46,6 +49,11 @@ public class QuizDetailTeacherActivity extends AppCompatActivity {
         
         // Initialize views
         quizContent = findViewById(R.id.quiz_content);
+        findViewById(R.id.btn_view_scores).setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(this, QuizScoresActivity.class);
+            intent.putExtra("quizId", quizId);
+            startActivity(intent);
+        });
         
         // Setup toolbar
         setupToolbar();
@@ -63,6 +71,13 @@ public class QuizDetailTeacherActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+            // Set navigation icon tint programmatically
+            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow_back_white_24dp);
+            if (upArrow != null) {
+                upArrow.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryLight), PorterDuff.Mode.SRC_ATOP);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            }
         }
     }
     

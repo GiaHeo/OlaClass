@@ -143,6 +143,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Quiz Scores Activity -->
+        <activity
+            android:name=".ui.assignments.QuizScoresActivity"
+            android:exported="false"
+            android:theme="@style/Theme.OlaClass" />
+
     </application>
 
 </manifest>

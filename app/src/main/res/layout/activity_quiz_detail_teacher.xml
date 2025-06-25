@@ -51,6 +51,13 @@
                 android:textColor="@color/black"
                 android:lineSpacingExtra="4dp"/>
 
+            <Button
+                android:id="@+id/btn_view_scores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xem điểm"
+                android:layout_marginTop="16dp"/>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
