@@ -46,6 +46,25 @@
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_questions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:clipToPadding="false" />
+
+        <Button
+            android:id="@+id/btn_submit_quiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nộp bài"
+            android:textAllCaps="false"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

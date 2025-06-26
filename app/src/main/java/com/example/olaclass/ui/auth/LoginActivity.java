@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -87,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize views
         EditText etEmail = findViewById(R.id.et_email);
         EditText etPassword = findViewById(R.id.et_password);
-        RadioGroup rgRole = findViewById(R.id.rg_role);
         Button btnLogin = findViewById(R.id.btn_login);
         Button btnGoogle = findViewById(R.id.btn_google_signin);
         Button btnRegister = findViewById(R.id.btn_register);
@@ -121,13 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
             
-            int selectedId = rgRole.getCheckedRadioButtonId();
-            if (selectedId == -1) {
-                Toast.makeText(this, "Vui lòng chọn vai trò", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            
-            String role = ((RadioButton) findViewById(selectedId)).getText().toString().toLowerCase();
+            // Loại bỏ việc kiểm tra role khi đăng nhập bằng email/password
+            // Role sẽ được lấy từ database sau khi đăng nhập thành công
             
             // Sign in with email and password
             mAuth.signInWithEmailAndPassword(email, password)
@@ -331,7 +323,6 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.et_email).setEnabled(!show);
         findViewById(R.id.et_password).setEnabled(!show);
         findViewById(R.id.cb_auto_login).setEnabled(!show);
-        findViewById(R.id.rg_role).setEnabled(!show);
         findViewById(R.id.btn_login).setEnabled(!show);
         findViewById(R.id.btn_register).setEnabled(!show);
         findViewById(R.id.btn_google_signin).setEnabled(!show);

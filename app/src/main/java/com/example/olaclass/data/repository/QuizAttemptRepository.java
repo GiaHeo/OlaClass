@@ -35,4 +35,8 @@ public class QuizAttemptRepository {
                 .whereEqualTo("classroomId", classroomId)
                 .get();
     }
+
+    public Task<QuerySnapshot> getQuizAttemptsByQuizId(String quizId) {
+        return quizAttemptsRef.whereEqualTo("quizId", quizId).get();
+    }
 } 

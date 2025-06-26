@@ -10,10 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -41,6 +43,9 @@ public class CreateQuizActivity extends AppCompatActivity {
     private Button endTimeButton;
     private EditText durationEditText;
     private Button createQuizButton;
+    private Button createQuestionSetButton;
+    private Button showQuestionSetsButton;
+    private TextView selectedQuestionSetInfo;
 
     private QuestionRepository questionRepository;
     private QuizRepository quizRepository;
@@ -71,6 +76,9 @@ public class CreateQuizActivity extends AppCompatActivity {
         endTimeButton = findViewById(R.id.button_end_time);
         durationEditText = findViewById(R.id.edit_text_duration);
         createQuizButton = findViewById(R.id.button_create_quiz);
+        createQuestionSetButton = findViewById(R.id.button_create_question_set);
+        showQuestionSetsButton = findViewById(R.id.button_show_question_sets);
+        selectedQuestionSetInfo = findViewById(R.id.text_selected_question_set_info);
 
         questionRepository = new QuestionRepository();
         quizRepository = new QuizRepository();
@@ -89,6 +97,14 @@ public class CreateQuizActivity extends AppCompatActivity {
         setupDateTimePickers();
 
         createQuizButton.setOnClickListener(v -> createNewQuiz());
+        
+        // Setup button listeners
+        createQuestionSetButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateQuizActivity.this, CreateQuestionSetActivity.class);
+            startActivity(intent);
+        });
+        
+        showQuestionSetsButton.setOnClickListener(v -> showQuestionSetsDialog());
     }
 
     private void loadQuestionSets() {
@@ -116,6 +132,19 @@ public class CreateQuizActivity extends AppCompatActivity {
                 questionSetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, titles);
                 questionSetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 questionSetSpinner.setAdapter(questionSetAdapter);
+                
+                // Add listener to spinner to update info text
+                questionSetSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                        updateSelectedQuestionSetInfo(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                        selectedQuestionSetInfo.setVisibility(View.GONE);
+                    }
+                });
             })
             .addOnFailureListener(e -> {
                 Toast.makeText(this, "Lỗi tải bộ câu hỏi: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -238,6 +267,48 @@ public class CreateQuizActivity extends AppCompatActivity {
             });
     }
 
+    private void showQuestionSetsDialog() {
+        if (questionSets.isEmpty()) {
+            Toast.makeText(this, "Bạn chưa có bộ câu hỏi nào.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        String[] questionSetTitles = new String[questionSets.size()];
+        for (int i = 0; i < questionSets.size(); i++) {
+            QuestionSet set = questionSets.get(i);
+            int questionCount = set.getQuestions() != null ? set.getQuestions().size() : 0;
+            questionSetTitles[i] = set.getTitle() + " (" + questionCount + " câu hỏi)";
+        }
+        
+        new AlertDialog.Builder(this)
+            .setTitle("Chọn bộ câu hỏi")
+            .setItems(questionSetTitles, (dialog, which) -> {
+                QuestionSet selectedSet = questionSets.get(which);
+                // Tìm vị trí của bộ câu hỏi được chọn trong spinner
+                for (int i = 0; i < questionSets.size(); i++) {
+                    if (questionSets.get(i).getId().equals(selectedSet.getId())) {
+                        questionSetSpinner.setSelection(i);
+                        break;
+                    }
+                }
+                dialog.dismiss();
+            })
+            .setNegativeButton("Hủy", null)
+            .show();
+    }
+
+    private void updateSelectedQuestionSetInfo(int position) {
+        if (position >= 0 && position < questionSets.size()) {
+            QuestionSet selectedSet = questionSets.get(position);
+            int questionCount = selectedSet.getQuestions() != null ? selectedSet.getQuestions().size() : 0;
+            String info = "Bộ câu hỏi: " + selectedSet.getTitle() + "\nSố câu hỏi: " + questionCount;
+            selectedQuestionSetInfo.setText(info);
+            selectedQuestionSetInfo.setVisibility(View.VISIBLE);
+        } else {
+            selectedQuestionSetInfo.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -245,5 +316,12 @@ public class CreateQuizActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh question sets when returning from CreateQuestionSetActivity
+        loadQuestionSets();
     }
 } 
