@@ -16,9 +16,7 @@
         <TextView
             android:id="@+id/tv_quiz_title_student"
             android:layout_width="match_parent"
-            android:layout_height
-            Feedback submitted
-            ="wrap_content"
+            android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@android:color/black"

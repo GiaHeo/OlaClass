@@ -92,7 +92,15 @@ public class CreateQuizActivity extends AppCompatActivity {
     }
 
     private void loadQuestionSets() {
-        questionRepository.getAllQuestionSets()
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Lỗi: Người dùng chưa đăng nhập.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String currentUserId = currentUser.getUid();
+        
+        questionRepository.getQuestionSetsByCreator(currentUserId)
             .addOnSuccessListener(sets -> {
                 questionSets.clear();
                 questionSets.addAll(sets);
@@ -100,6 +108,11 @@ public class CreateQuizActivity extends AppCompatActivity {
                 for (QuestionSet set : sets) {
                     titles.add(set.getTitle());
                 }
+                
+                if (titles.isEmpty()) {
+                    Toast.makeText(this, "Bạn chưa có bộ câu hỏi nào. Vui lòng tạo bộ câu hỏi trước.", Toast.LENGTH_LONG).show();
+                }
+                
                 questionSetAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, titles);
                 questionSetAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 questionSetSpinner.setAdapter(questionSetAdapter);

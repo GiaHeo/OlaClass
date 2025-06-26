@@ -28,7 +28,13 @@ public class AssignmentsTeacherViewModel extends ViewModel {
     }
 
     public void loadQuestionSets() {
-        questionRepository.getAllQuestionSets()
+        String currentUserId = mAuth.getCurrentUser() != null ? mAuth.getCurrentUser().getUid() : "";
+        if (currentUserId.isEmpty()) {
+            _errorMessage.setValue("Chưa đăng nhập");
+            return;
+        }
+        
+        questionRepository.getQuestionSetsByCreator(currentUserId)
             .addOnSuccessListener(questionSetList -> {
                 _questionSets.setValue(questionSetList);
             })
